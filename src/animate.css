@@ -1,0 +1,15 @@
+.tab-transition-enter {
+    opacity: 0;
+  }
+  .tab-transition-enter-active {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+  }
+  .tab-transition-exit {
+    opacity: 1;
+  }
+  .tab-transition-exit-active {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  

@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+.tabs-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.tab-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: opacity 500ms ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.tab-content.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tab-content.animating {
+  animation: fade 500ms ease-in-out;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.tab-content.inactive {
+  animation: fade-out 500ms ease-in-out;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
+
