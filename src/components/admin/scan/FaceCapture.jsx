@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
+import MODEL_URL from '../../../constants/model';
 
 const FaceCapture = ({ start, handleSend }) => {
     const videoRef = useRef(null);
@@ -11,9 +12,9 @@ const FaceCapture = ({ start, handleSend }) => {
     const loadModels = async () => {
         try {
             await Promise.all([
-                faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-                faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-                faceapi.nets.faceRecognitionNet.loadFromUri('/models')
+                faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+                faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+                faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
             ]);
             setModelsLoaded(true);
             console.log("Models loaded successfully");
