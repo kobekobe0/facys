@@ -12,7 +12,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const isLoading = useAuth(); // Protect the page based on user role
+    const {user} = useAuth();
 
 
     const navigate = useNavigate();
@@ -45,21 +45,6 @@ const LoginPage = () => {
         }
     }
 
-    if(isLoading) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <svg xmlns="http://www.w3.org/2000/svg" width="3em" height="3em" viewBox="0 0 24 24">
-                    <g stroke="black">
-                        <circle cx="12" cy="12" r="9.5" fill="none" stroke-linecap="round" stroke-width="3">
-                            <animate attributeName="stroke-dasharray" calcMode="spline" dur="1.5s" keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1" keyTimes="0;0.475;0.95;1" repeatCount="indefinite" values="0 150;42 150;42 150;42 150"/>
-                            <animate attributeName="stroke-dashoffset" calcMode="spline" dur="1.5s" keySplines="0.42,0,0.58,1;0.42,0,0.58,1;0.42,0,0.58,1" keyTimes="0;0.475;0.95;1" repeatCount="indefinite" values="0;-16;-59;-59"/>
-                        </circle>
-                        <animateTransform attributeName="transform" dur="2s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/>
-                    </g>
-                </svg>
-            </div>
-        );
-    }
 
     return (
         <div className="flex flex-1 bg-slate-100 items-center flex-col w-full h-fit overflow-y-scroll">
@@ -90,6 +75,7 @@ const LoginPage = () => {
                 <div className="flex flex-col space-y-4">
                     <Link to="/register" className="text-red-800"><span className="text-black">Don't have an account?</span> Register here</Link>
                     <Link to="/forgot-password" className="text-red-800"><span className="text-black">Forgot your password?</span> Reset here</Link>
+                    <Link to="/admin-signin" className="text-red-800"><span className="text-black">Access admin dashboard</span> Click here</Link>
                 </div>
 
                 <div className="w-full mt-8">
@@ -102,17 +88,12 @@ const LoginPage = () => {
 
 const Signin = () => {
     const navigate = useNavigate();
-    const tempSignin = (e) => {
-        e.preventDefault();
-        console.log('Signing in...');
-        navigate('/');
-    }
     return (
         <main className="flex flex-col h-[100vh]">
             <Navbar/>
             <LoginPage/>
             <div className="flex-1 max-h-20 flex items-center justify-center bg-red-950 shadow-lg">
-                <p className="text-white text-xs">© ScholarPass Team | 2024</p>
+                <p className="text-white text-xs">© Facys Team | 2024</p>
             </div>
         </main>
     );

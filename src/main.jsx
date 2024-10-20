@@ -31,6 +31,9 @@ import Landing from './pages/Landing'
 import Register from './pages/Register'
 import StudentHome from './pages/StudentHome'
 import ResetPassword from './pages/ResetPassword'
+import Webcam from './components/Webcam'
+import AdminSignin from './pages/AdminSignin'
+import FaceRecognition from './pages/FaceRecognition'
 
 const router = createBrowserRouter([
   {
@@ -40,8 +43,8 @@ const router = createBrowserRouter([
     errorElement: <Error/>,
     children:[
       {
-        path: 'census',
-        element: <Census />,
+        index: true,
+        element: <FaceRecognition />,
       },
     ]
   },
@@ -69,8 +72,16 @@ const router = createBrowserRouter([
     element: <Signin />
   },
   {
+    path: '/admin-signin',
+    element: <AdminSignin />
+  },
+  {
     path: '/forgot-password',
     element: <ResetPassword />
+  },
+  {
+    path: '/test',
+    element: <Webcam />
   },
   {
     path: '/',

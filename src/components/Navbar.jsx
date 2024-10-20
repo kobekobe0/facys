@@ -24,15 +24,6 @@ const Navbar = () => {
 
           {/* Middle: Home, About, Features (hidden on small view) */}
           <div className="hidden md:flex space-x-4">
-            <a href="#home" className="text-gray-600 hover:text-green-500">
-              Home
-            </a>
-            <a href="#about" className="text-gray-600 hover:text-green-500">
-              About
-            </a>
-            <a href="#features" className="text-gray-600 hover:text-green-500">
-              Features
-            </a>
           </div>
 
           {/* Right side: Login/Signup (hidden on small view) */}
@@ -71,27 +62,7 @@ const Navbar = () => {
           isOpen ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
         }`}
       >
-        <a
-          href="#home"
-          className="text-xl text-gray-600 hover:text-green-500"
-          onClick={toggleMenu}
-        >
-          Home
-        </a>
-        <a
-          href="#about"
-          className="text-xl text-gray-600 hover:text-green-500"
-          onClick={toggleMenu}
-        >
-          About
-        </a>
-        <a
-          href="#features"
-          className="text-xl text-gray-600 hover:text-green-500"
-          onClick={toggleMenu}
-        >
-          Features
-        </a>
+    
         <Link
           className="text-xl text-gray-600 hover:text-green-500"
           to="/signin"

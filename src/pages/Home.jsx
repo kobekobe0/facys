@@ -5,7 +5,7 @@ import useAuth from "../helper/useAuth";
 import { useEffect } from "react";
 
 const Home = () => {
-    const isLoading = useAuth(); // Protect the page based on user role
+    const {isLoading} = useAuth();
 
     if (isLoading) {
       return (
@@ -17,10 +17,11 @@ const Home = () => {
   
     return (
         <main className="flex">
-            <div className='w-64 flex flex-col bg-black text-white h-screen fixed'>
-                <Sidebar/>
+            <Sidebar/>
+            <div className="h-screen overflow-scroll flex-1 p-4 bg-slate-50">
+              <Outlet/>  
             </div>
-            <Outlet/>
+            
         </main>
     );
 }

@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
 import StudentNavbar from "../components/student/StudentNavbar";
+import useAuth from "../helper/useAuth";
 
 export default function StudentHome() {
-    const logout = () => {
-        localStorage.removeItem('authToken');
-        window.location.href = '/signin';
-    }
+
+    const {user} = useAuth();
+
     return (
         <div>
             <StudentNavbar />

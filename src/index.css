@@ -53,4 +53,18 @@
 }
 
 
+.webcam-container {
+  position: relative;
+}
 
+.webcam-video {
+  width: 640px;
+  height: 480px;
+}
+
+.webcam-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none; /* Allow clicks to pass through to the video */
+}
