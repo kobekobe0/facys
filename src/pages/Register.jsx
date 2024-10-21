@@ -125,6 +125,8 @@ const Register = () => {
           faceData: faceData,
         }
 
+        console.log(body)
+
         const response = await axios.post(`${API_URL}student/create`, body)
 
         console.log(response.data);
