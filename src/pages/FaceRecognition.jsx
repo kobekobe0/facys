@@ -12,11 +12,28 @@ function FaceRecognition() {
         const res = await axios.post(`${API_URL}face/scan`, {
             faceData
         }).then(res => {
+            console.log(res.data);
             setStudent(res.data.student);
             toast.success('Student found');
         }).catch(err => {
             toast.error(err.response.data.message);
+            setStudent(null)
         });
+    }
+
+    const handleCreateLog = async () => {
+        if(!student) return;
+
+        const res = await axios.post(`${API_URL}log/`, {
+            studentID: student._id
+        }).then(res => {
+            toast.success('Student log created');
+            setStudent(null);
+        }).catch(err => {
+            toast.error(err.response.data.message);
+            setStudent(null);
+        });
+
     }
     return (
         <div className='flex p-8 flex-col h-full'>
@@ -25,7 +42,7 @@ function FaceRecognition() {
                 {
                     start && (
                         <div className='text-sm'>
-                            <button onClick={() => setStart(!start)} className='p-2 bg-red-500 rounded text-white text-xs'>Stop Recognition</button>
+                            <button onClick={() => setStart(false)} className='p-2 bg-red-500 rounded text-white text-xs'>Stop Recognition</button>
                             
                         </div>
                     )
@@ -47,58 +64,52 @@ function FaceRecognition() {
                         )
                     }
                 </div>
-                <div className='w-1/3'>
+                <div className='w-1/3 h-fit'>
                     <h2 className='my-4 font-medium'>Student Details</h2>
-                    <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white border border-gray-300">
-                        <tbody className="text-gray-600 text-sm font-light">
-                        
-                            <tr className="border-b border-gray-200">
-                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left">Student Number</td>
-                            <td className="py-3 px-6 text-left">{student?.studentNumber || 'N/A'}</td>
-                            </tr>
-                        
-                        
-                            <tr className="border-b border-gray-200">
-                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left">Name</td>
-                            <td className="py-3 px-6 text-left">{student?.name || 'N/A'}</td>
-                            </tr>
-    
-                            <tr className="border-b border-gray-200">
-                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left">Date of Birth</td>
-                            <td className="py-3 px-6 text-left">{student?.dateOfBirth || 'N/A'}</td>
-                            </tr>
- 
-       
-                            <tr className="border-b border-gray-200">
-                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left">Degree</td>
-                            <td className="py-3 px-6 text-left">{student?.degree || 'N/A'}</td>
-                            </tr>
-       
-                            <tr className="border-b border-gray-200">
-                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left">Department</td>
-                            <td className="py-3 px-6 text-left">{student?.department || 'N/A'}</td>
-                            </tr>
-
-                            <tr className="border-b border-gray-200">
-                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left">Section</td>
-                            <td className="py-3 px-6 text-left">{student?.section || 'N/A'}</td>
-                            </tr>
-
-                            <tr className="border-b border-gray-200">
-                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left">School Year</td>
-                            <td className="py-3 px-6 text-left">{student?.SY || 'N/A'}</td>
-                            </tr>
-      
-                            <tr className="border-b border-gray-200">
-                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left">Year Level</td>
-                            <td className="py-3 px-6 text-left">{student?.yearLevel || 'N/A'}</td>
-                            </tr>
-           
-                        </tbody>
-                    </table>
+                    <div className="overflow-x-auto h-full">
+                        <table className="min-w-full bg-white border border-gray-300 h-full">
+                            <tbody className="text-gray-600 text-sm font-light">
+                                <tr className="border-b border-gray-200">
+                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Student Number</td>
+                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.studentNumber || 'N/A'}</td>
+                                </tr>
+                                <tr className="border-b border-gray-200">
+                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Name</td>
+                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.name || 'N/A'}</td>
+                                </tr>
+                                <tr className="border-b border-gray-200">
+                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Date of Birth</td>
+                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.dateOfBirth || 'N/A'}</td>
+                                </tr>
+                                <tr className="border-b border-gray-200">
+                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Degree</td>
+                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.degree || 'N/A'}</td>
+                                </tr>
+                                <tr className="border-b border-gray-200">
+                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Department</td>
+                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.department || 'N/A'}</td>
+                                </tr>
+                                <tr className="border-b border-gray-200">
+                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Section</td>
+                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.section || 'N/A'}</td>
+                                </tr>
+                                <tr className="border-b border-gray-200">
+                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">School Year</td>
+                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.SY || 'N/A'}</td>
+                                </tr>
+                                <tr className="border-b border-gray-200">
+                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Year Level</td>
+                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.yearLevel || 'N/A'}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className='w-full flex mt-8 items-center justify-center'>
+                        <button onClick={handleCreateLog} className={`p-2 w-full  text-white rounded text-sm ${!student ? 'bg-gray-500/30' : 'bg-red-600 hover:bg-red-700'} transition`} disabled={!student}>Create Student Log</button>
                     </div>
                 </div>
+
+
             </div>
         </div>
     )

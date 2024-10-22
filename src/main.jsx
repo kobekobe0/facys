@@ -34,6 +34,8 @@ import ResetPassword from './pages/ResetPassword'
 import Webcam from './components/Webcam'
 import AdminSignin from './pages/AdminSignin'
 import FaceRecognition from './pages/FaceRecognition'
+import ChangePassword from './pages/ResetPasswordUser'
+import StudentLogs from './components/StudentLogs'
 
 const router = createBrowserRouter([
   {
@@ -46,6 +48,10 @@ const router = createBrowserRouter([
         index: true,
         element: <FaceRecognition />,
       },
+      {
+        path: 'logs',
+        element: <StudentLogs />,
+      },
     ]
   },
   {
@@ -54,15 +60,6 @@ const router = createBrowserRouter([
     errorElement: <Error/>,
     children:[]
   },
-  {
-    path: '/census/:id/:householdId',
-    element: <Household />
-  },
-  {
-    path: '/census/:id/household/new',
-    element: <HouseholdNew />
-  },
-
   {
     path: '/register',
     element: <Register />
@@ -78,6 +75,10 @@ const router = createBrowserRouter([
   {
     path: '/forgot-password',
     element: <ResetPassword />
+  },
+  {
+    path: '/forgot-password/:id',
+    element: <ChangePassword />
   },
   {
     path: '/test',

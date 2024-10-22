@@ -31,6 +31,9 @@ const Register = () => {
       sex: 'M',
       dateOfBirth: '',
     });
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const [schedule, setSchedule] = useState([]);
     const navigate = useNavigate();
@@ -90,6 +93,9 @@ const Register = () => {
           setActiveTab(activeTab + 1);
           break;
         case 2:
+          console.log('Face Data');
+          if(!faceData) return toast.error("Please capture your face");
+          setActiveTab(activeTab + 1);
           break;
         default:
           break;
@@ -102,13 +108,18 @@ const Register = () => {
       setActiveTab(activeTab - 1);
     };
 
-    const handleRetry = () => {
+    const handleRetry = (tab) => {
       setFaceData(null);
-      setActiveTab(activeTab - 1);
+      setActiveTab(activeTab - tab);
       setScreenshot(null);
     }
 
     const handleSubmit = async () => {
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if(email === '' || password === '' || confirmPassword === '') return toast.error("Please fill in all fields");
+      if(!emailRegex.test(email)) return toast.error("Invalid email address");
+      if(password !== confirmPassword) return toast.error("Passwords do not match");
+      if(password.length < 8) return toast.error("Password must be at least 8 characters long");
       toast.loading("Uploading data...");
       try{
         const body = {
@@ -123,6 +134,8 @@ const Register = () => {
           SY: `AY ${details.SY.start} - ${details.SY.end} ${details.SY.semester} Semester`,
           yearLevel: details.yearLevel,
           faceData: faceData,
+          email: email,
+          password: password
         }
 
         console.log(body)
@@ -178,7 +191,31 @@ const Register = () => {
                   <p className="text-sm mb-4">Does this photo resembles your face?</p>
                   <img src={screenshot} alt="" className="h-[380px] w-[320px] object-cover"/>
                   <div className="flex mt-4 gap-4 justify-end">
-                    <button className="flex items-center border-red-700 border rounded text-red-700 gap-2 px-2 py-1" onClick={handleRetry}><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="#c20000" fill-rule="evenodd" d="M7.32.029a8 8 0 0 1 7.18 3.307V1.75a.75.75 0 0 1 1.5 0V6h-4.25a.75.75 0 0 1 0-1.5h1.727A6.5 6.5 0 0 0 1.694 6.424A.75.75 0 1 1 .239 6.06A8 8 0 0 1 7.319.03Zm-3.4 14.852A8 8 0 0 0 15.76 9.94a.75.75 0 0 0-1.455-.364A6.5 6.5 0 0 1 2.523 11.5H4.25a.75.75 0 0 0 0-1.5H0v4.25a.75.75 0 0 0 1.5 0v-1.586a8 8 0 0 0 2.42 2.217" clip-rule="evenodd"/></svg>Retry</button>
+                    <button className="flex items-center border-red-700 border rounded text-red-700 gap-2 px-2 py-1" onClick={() => handleRetry(1)}><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="#c20000" fill-rule="evenodd" d="M7.32.029a8 8 0 0 1 7.18 3.307V1.75a.75.75 0 0 1 1.5 0V6h-4.25a.75.75 0 0 1 0-1.5h1.727A6.5 6.5 0 0 0 1.694 6.424A.75.75 0 1 1 .239 6.06A8 8 0 0 1 7.319.03Zm-3.4 14.852A8 8 0 0 0 15.76 9.94a.75.75 0 0 0-1.455-.364A6.5 6.5 0 0 1 2.523 11.5H4.25a.75.75 0 0 0 0-1.5H0v4.25a.75.75 0 0 0 1.5 0v-1.586a8 8 0 0 0 2.42 2.217" clip-rule="evenodd"/></svg>Retry</button>
+                    <button className="border border-red-700 text-white bg-red-700 rounded px-2 py-1" onClick={()=>setActiveTab(activeTab+1)}>Submit</button>
+                  </div>
+                  
+                </div>
+              )
+            }
+
+            {
+              activeTab === 4 && (
+                <div>
+                  <h2 className="text-2xl">Login Credentails</h2>
+                  <p className="text-sm mb-4">Provide your desired email and password</p>
+                  <div className="flex flex-col w-full gap-2">
+                    <label>Email</label>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border border-gray-300 rounded-md p-2 mb-4 mt-1 w-full"/>
+
+                    <label>Password</label>
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="border border-gray-300 rounded-md p-2 mt-1 w-full"/>
+                  
+                    <label>Confirm Password</label>
+                    <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="border border-gray-300 rounded-md p-2 mt-1 w-full"/>
+                  </div>
+                  <div className="flex mt-4 gap-4 justify-end">
+                    <button className="flex items-center border-red-700 border rounded text-red-700 gap-2 px-2 py-1" onClick={()=> handleRetry(2)}>Back</button>
                     <button className="border border-red-700 text-white bg-red-700 rounded px-2 py-1" onClick={handleSubmit}>Submit</button>
                   </div>
                   
