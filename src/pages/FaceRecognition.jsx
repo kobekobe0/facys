@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FaceCapture from '../components/admin/scan/FaceCapture';
 import axios from 'axios';
 import API_URL from '../constants/api';
@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 function FaceRecognition() {
     const [start, setStart] = useState(false);
     const [student, setStudent] = useState(null);
+    const [automatic, setAutomatic] = useState(false);
 
     const handleSend = async (faceData) => {
         const res = await axios.post(`${API_URL}face/scan`, {
@@ -21,6 +22,13 @@ function FaceRecognition() {
         });
     }
 
+    useEffect(()=> {
+        if(!student) return
+        if(automatic) {
+            handleCreateLog();
+        }
+    },[student])
+
     const handleCreateLog = async () => {
         if(!student) return;
 
@@ -28,12 +36,13 @@ function FaceRecognition() {
             studentID: student._id
         }).then(res => {
             toast.success('Student log created');
+            if(automatic) return 
             setStudent(null);
         }).catch(err => {
-            toast.error(err.response.data.message);
+            if(automatic) return
             setStudent(null);
+            toast.error(err.response.data.message);
         });
-
     }
     return (
         <div className='flex p-8 flex-col h-full'>
@@ -41,7 +50,12 @@ function FaceRecognition() {
                 <h1 className='text-xl font-semibold'>Face Recognition</h1>
                 {
                     start && (
-                        <div className='text-sm'>
+                        <div className='text-sm flex items-center gap-4'>
+                            <label className="inline-flex gap-2 items-center cursor-pointer">
+                                <span className="ms-3 text-xs text-gray-900 dark:text-gray-300">Automatic Logging</span>
+                                <input type="checkbox" checked={automatic} onChange={() => setAutomatic(!automatic)} value="" className="sr-only peer"/>
+                                <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-red-600"></div>
+                            </label>
                             <button onClick={() => setStart(false)} className='p-2 bg-red-500 rounded text-white text-xs'>Stop Recognition</button>
                             
                         </div>
@@ -105,7 +119,7 @@ function FaceRecognition() {
                         </table>
                     </div>
                     <div className='w-full flex mt-8 items-center justify-center'>
-                        <button onClick={handleCreateLog} className={`p-2 w-full  text-white rounded text-sm ${!student ? 'bg-gray-500/30' : 'bg-red-600 hover:bg-red-700'} transition`} disabled={!student}>Create Student Log</button>
+                        <button onClick={handleCreateLog} className={`p-2 w-full  text-white rounded text-sm ${!student || automatic ? 'bg-gray-500/30' : 'bg-red-600 hover:bg-red-700'} transition`} disabled={!student || automatic}>Create Student Log</button>
                     </div>
                 </div>
 
