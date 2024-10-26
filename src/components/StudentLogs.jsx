@@ -111,13 +111,13 @@ function StudentLogs() {
                             </tr>
                         </thead>
                         <tbody>
-                            {logs.map(log => (
-                                <tr key={log._id} className="hover:bg-gray-100">
-                                    <td className="border border-gray-300 p-2">{log.studentID.name}</td>
-                                    <td className="border border-gray-300 p-2">{log.studentID.studentNumber}</td>
-                                    <td className="border border-gray-300 p-2">{log.studentID.department}</td>
-                                    <td className="border border-gray-300 p-2">{log.studentID.section}</td>
-                                    <td className="border border-gray-300 p-2">{new Date(log.timeIn).toLocaleString('en-us', {month: 'long', day:'2-digit', hour:'2-digit', minute:'2-digit'})}</td>
+                            {logs?.map(log => (
+                                <tr key={log?._id} className="hover:bg-gray-100">
+                                    <td className="border border-gray-300 p-2">{log?.studentID?.name || 'N/A'}</td>
+                                    <td className="border border-gray-300 p-2">{log?.studentID?.studentNumber || 'N/A'}</td>
+                                    <td className="border border-gray-300 p-2">{log?.studentID?.department || 'N/A'}</td>
+                                    <td className="border border-gray-300 p-2">{log?.studentID?.section || 'N/A'}</td>
+                                    <td className="border border-gray-300 p-2">{new Date(log?.timeIn).toLocaleString('en-us', {month: 'long', day:'2-digit', hour:'2-digit', minute:'2-digit'})}</td>
                                 </tr>
                             ))}
 
