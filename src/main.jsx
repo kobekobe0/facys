@@ -37,6 +37,7 @@ import FaceRecognition from './pages/FaceRecognition'
 import ChangePassword from './pages/ResetPasswordUser'
 import StudentLogs from './components/StudentLogs'
 import Students from './components/Students'
+import StudentId from './pages/StudentId'
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
         path: 'students',
         element: <Students />,
       },
+      {
+        path: 'students/:id',
+        element: <StudentId />,
+      }
     ]
   },
   {

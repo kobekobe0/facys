@@ -4,6 +4,7 @@ import React from 'react'
 import API_URL from "../constants/api";
 import debounce from "../helper/debounce";
 import abbreviate from "../helper/abbreviate";
+import { Link } from "react-router-dom";
 
 const colleges = [
     'College of Science',
@@ -23,11 +24,15 @@ function Students() {
     const [logs, setLogs] = useState([]);
     const [name, setName] = useState('');
     const [limit, setLimit] = useState(100);
+    const [department, setDepartment] = useState(null);
+    const [yearLevel, setYearLevel] = useState(null);
     const [page, setPage] = useState(1);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
     const fetchLogs = async () => {
+        if(department === 'null') setDepartment(null);
+        if(yearLevel === 'null') setYearLevel(null);
         try {
             const params = {};
     
@@ -36,8 +41,10 @@ function Students() {
             if (page) params.page = page;
             if (startDate) params.startDate = startDate;
             if (endDate) params.endDate = endDate;
+            if (department) params.department = department;
+            if (yearLevel) params.yearLevel = yearLevel;
     
-            const res = await axios.get(`${API_URL}log`, { params });
+            const res = await axios.get(`${API_URL}student/all`, { params });
     
             console.log(res.data.docs);
             setLogs(res.data.docs);
@@ -59,8 +66,9 @@ function Students() {
     };
 
     useEffect(() => {
+        console.log(department, yearLevel)
         fetchLogs();
-    }, [name, limit, page, startDate, endDate])
+    }, [name, limit, page, startDate, endDate, department, yearLevel])
 
     useEffect(() => {
         fetchLogs();
@@ -77,9 +85,10 @@ function Students() {
                         <label htmlFor="Department" className="text-xs font-medium text-gray-700">Department</label>
                         <select 
                         id="Department" 
-                        onChange={(e) => setLimit(e.target.value)} 
+                        onChange={(e) => setDepartment(e.target.value)} 
                         className="mt-1 block w-full rounded-md border-gray-300 border shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         >
+                            <option value='null'>Set department</option>
                             {
                                 colleges.map(college => (
                                     <option value={college}>{abbreviate(college)}</option>
@@ -91,14 +100,28 @@ function Students() {
                         <label htmlFor="limit" className="text-xs font-medium text-gray-700">Year Level</label>
                         <select 
                         id="level" 
-                        onChange={(e) => setLimit(e.target.value)} 
+                        onChange={(e) => setYearLevel(e.target.value)} 
                         className="mt-1 block w-full rounded-md border-gray-300 border shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         >
+                            <option value='null'>Set year</option>
                             {
                                 yearLevels.map(level => (
                                     <option value={level}>{level} year</option>
                                 ))
                             }
+                        </select>
+                    </div>
+                    <div className="flex flex-col min-w-[200px]">
+                        <label htmlFor="limit" className="text-xs font-medium text-gray-700">Limit</label>
+                        <select 
+                        id="level" 
+                        onChange={(e) => setLimit(e.target.value)} 
+                        className="mt-1 block w-full rounded-md border-gray-300 border shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                            <option value="500">500</option>
+                            <option value="1000">1000</option>
                         </select>
                     </div>
                 </div>
@@ -116,18 +139,22 @@ function Students() {
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Student Name</th>
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Student Number</th>
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Department</th>
+                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Year Level</th>
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Section</th>
-                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Time In</th>
+                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {logs.map(log => (
                                 <tr key={log._id} className="hover:bg-gray-100">
-                                    <td className="border border-gray-300 p-2">{log.studentID.name}</td>
-                                    <td className="border border-gray-300 p-2">{log.studentID.studentNumber}</td>
-                                    <td className="border border-gray-300 p-2">{log.studentID.department}</td>
-                                    <td className="border border-gray-300 p-2">{log.studentID.section}</td>
-                                    <td className="border border-gray-300 p-2">{new Date(log.timeIn).toLocaleString('en-us', {month: 'long', day:'2-digit', hour:'2-digit', minute:'2-digit'})}</td>
+                                    <td className="border border-gray-300 p-2">{log?.name}</td>
+                                    <td className="border border-gray-300 p-2">{log?.studentNumber}</td>
+                                    <td className="border border-gray-300 p-2">{log?.department}</td>
+                                    <td className="border border-gray-300 p-2">{log?.yearLevel}</td>
+                                    <td className="border border-gray-300 p-2">{log?.section}</td>
+                                    <td className="border border-gray-300 p-2 flex item-center justify-center font-bold gap-2">
+                                        <Link to={`/admin/students/${log._id}`} className=' text-blue-500 border-blue-500  text-xs px-2 rounded py-1'>View</Link>
+                                    </td>
                                 </tr>
                             ))}
 
