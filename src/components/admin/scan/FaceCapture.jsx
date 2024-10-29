@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import MODEL_URL from '../../../constants/model';
+import toast from 'react-hot-toast';
 
 const FaceCapture = ({ start, handleSend }) => {
     const videoRef = useRef(null);
@@ -22,6 +23,7 @@ const FaceCapture = ({ start, handleSend }) => {
                 console.log("Models loaded successfully");
             } catch (error) {
                 console.error("Error loading face-api models:", error);
+                toast.error('Error loading face recognition models, reload the page.');
             }
         };
         loadModels();
