@@ -38,6 +38,7 @@ import ChangePassword from './pages/ResetPasswordUser'
 import StudentLogs from './components/StudentLogs'
 import Students from './components/Students'
 import StudentId from './pages/StudentId'
+import WebcamCaptureTest from './components/WebcamCaptureTest'
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <Register />
+  },
+  {
+    path: '/testing',
+    element: <WebcamCaptureTest />
   },
   {
     path: '/signin',

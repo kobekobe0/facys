@@ -113,46 +113,63 @@ const Register = () => {
       setActiveTab(activeTab - tab);
       setScreenshot(null);
     }
-
     const handleSubmit = async () => {
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-      if(email === '' || password === '' || confirmPassword === '') return toast.error("Please fill in all fields");
-      if(!emailRegex.test(email)) return toast.error("Invalid email address");
-      if(password !== confirmPassword) return toast.error("Passwords do not match");
-      if(password.length < 8) return toast.error("Password must be at least 8 characters long");
-      toast.loading("Uploading data...");
-      try{
-        const body = {
-          studentNumber: details.studentNumber,
-          name: details.studentName,
-          schedule: JSON.stringify(schedule),
-          department: details.department,
-          sex: details.sex,
-          dateOfBirth: details.dateOfBirth,
-          degree: details.degree,
-          section: details.section, 
-          SY: `AY ${details.SY.start} - ${details.SY.end} ${details.SY.semester} Semester`,
-          yearLevel: details.yearLevel,
-          faceData: faceData,
-          email: email,
-          password: password
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (email === '' || password === '' || confirmPassword === '') return toast.error("Please fill in all fields");
+        if (!emailRegex.test(email)) return toast.error("Invalid email address");
+        if (password !== confirmPassword) return toast.error("Passwords do not match");
+        if (password.length < 8) return toast.error("Password must be at least 8 characters long");
+    
+        toast.loading("Uploading data...");
+    
+        try {
+            // Create a new FormData object
+            const formData = new FormData();
+    
+            // Append text fields to FormData
+            formData.append("studentNumber", details.studentNumber);
+            formData.append("name", details.studentName);
+            formData.append("schedule", JSON.stringify(schedule));
+            formData.append("department", details.department);
+            formData.append("sex", details.sex);
+            formData.append("dateOfBirth", details.dateOfBirth);
+            formData.append("degree", details.degree);
+            formData.append("section", details.section);
+            formData.append("SY", `AY ${details.SY.start} - ${details.SY.end} ${details.SY.semester} Semester`);
+            formData.append("yearLevel", details.yearLevel);
+            formData.append("email", email);
+            formData.append("password", password);
+    
+            // Append the faceData as a JSON string
+            formData.append("faceData", JSON.stringify(faceData));
+    
+            // Append the screenshot image file
+            if (screenshot) {
+                console.log("Screenshot data URL:", screenshot); // Debug log
+                const response = await fetch(screenshot);
+                const blob = await response.blob();
+                console.log(blob)
+                formData.append("image", blob, "screenshot.jpg"); // Append with a file name
+            }
+    
+            // Send the FormData with Axios
+            const response = await axios.post(`${API_URL}student/create`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+    
+            console.log(response.data);
+            toast.dismiss();
+            toast.success("Registration successful.");
+            navigate('/');
+        } catch (error) {
+            toast.dismiss();
+            toast.error(error.response?.data?.message || "Registration failed.");
+            console.error(error);
         }
-
-        console.log(body)
-
-        const response = await axios.post(`${API_URL}student/create`, body)
-
-        console.log(response.data);
-        toast.dismiss();
-        toast.success("Registration successful.");
-        navigate('/');
-      } catch (error){
-        toast.dismiss();
-        toast.error(error.response.data.message);
-        console.log(error);
-      }
-    }
-
+    };
+  
     return (
       <main className="flex flex-col h-[100vh] overflow-scroll items-center">
         <div className="h-full overflow-auto flex flex-col w-full md:w-1/3 p-4">

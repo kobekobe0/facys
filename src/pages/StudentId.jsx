@@ -5,6 +5,7 @@ import API_URL from '../constants/api';
 import StudentProfile from '../components/admin/student/StudentProfile';
 import LogsTab from '../components/admin/student/LogsTab';
 import ScheduleTab from '../components/admin/student/ScheduleTab';
+import StudentSettings from '../components/admin/student/StudentSettings';
 
 function StudentId() {
   const [student, setStudent] = useState(null);
@@ -66,7 +67,7 @@ function StudentId() {
           <div className="flex-grow w-full overflow-y-auto text-gray-600">
             {activeTab === 'logs' && <LogsTab studentId={id} />}
             {activeTab === 'schedule' && <ScheduleTab schedule={student?.schedule || []} />}
-            {activeTab === 'settings' && <div>Settings Content</div>}
+            {activeTab === 'settings' && <StudentSettings student={student} />}
           </div>
         </div>
       </div>

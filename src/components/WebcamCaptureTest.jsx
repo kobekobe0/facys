@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
-import MODEL_URL from '../../constants/model';
+import MODEL_URL from '../constants/model';
 
 const WebcamCapture = ({ setFaceData, next, back, setScreenshot, screenshot }) => {
     const videoRef = useRef(null);

@@ -20,6 +20,11 @@ function StudentProfile({ student }) {
         </div>
 
         <div className="text-sm text-gray-700 mt-4">
+          <h3 className="text-xs text-gray-500 uppercase">COR Academic Year</h3>
+          <p>{student?.SY || 'unavailable'}</p>
+        </div>
+
+        <div className="text-sm text-gray-700 mt-4">
           <h3 className="text-xs text-gray-500 uppercase">Section</h3>
           <p>{student?.section || 'No Section'}</p>
         </div>
