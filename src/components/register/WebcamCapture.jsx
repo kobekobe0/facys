@@ -207,7 +207,7 @@ const WebcamCapture = ({ setFaceData, next, back, setScreenshot, screenshot }) =
 
             {
                 confidence === null && start && (
-                    <p className="text-red-500 text-sm mt-4">Please move closer to the camera.</p>
+                    <p className="text-red-500 text-sm mt-4 p-4 absolute bg-white shadow-lg font-medium">Please move closer to the camera.</p>
                 )
             }
         </div>
