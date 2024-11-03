@@ -173,6 +173,7 @@ const WebcamCapture = ({ setFaceData, next, back, setScreenshot, screenshot }) =
             <div className="relative w-full max-w-[320px] h-[568px] overflow-hidden">
                 <video
                     ref={videoRef}
+                    playsInline
                     autoPlay
                     className="absolute top-0 left-0 w-full h-full object-cover shadow-lg"
                 />
