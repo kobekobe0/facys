@@ -158,6 +158,14 @@ function Students() {
                                 </tr>
                             ))}
 
+                            {
+                                logs.length === 0 && (
+                                    <tr className="border-none">
+                                        <td colSpan="6" rowSpan="6" className="text-center border-none"><p className="my-4 font-medium text-gray-600">No data available</p></td>
+                                    </tr>
+                                )
+                            }
+
                         </tbody>
                     </table>
                 </div>

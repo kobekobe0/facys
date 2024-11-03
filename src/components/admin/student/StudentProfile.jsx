@@ -2,12 +2,17 @@ import React from 'react';
 import abbreviate from '../../../helper/abbreviate';
 
 function StudentProfile({ student }) {
+  console.log(student)
   return (
     <div className="flex flex-col bg-white my-4 mx-2 w-fit px-12 shadow-md p-6 rounded-lg items-start transition duration-200 ease-in-out transform hover:shadow-xl">
       <div className="flex flex-col gap-4">
         <h1 className="text-lg text-gray-700 mb-2">Student Profile</h1>
         <div className='flex items-center w-full justify-start my-4 '>
-            <img src="https://placehold.co/150" alt="Profile Picture" className='w-56 h-56 object-cover self-center rounded-md shadow-md' />
+          <img
+            src={`${student?.pfp ? student.pfp : "https://placehold.co/150"}`}
+            alt="Profile Picture"
+            className="w-56 h-56 object-cover self-center rounded-md shadow-md"
+          />
         </div>
         <h2 className="text-2xl font-bold text-gray-900">
           {student?.name || 'N/A'}
