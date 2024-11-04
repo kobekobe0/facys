@@ -1,108 +1,106 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import useUserStore from "../../store/user.store";
-import Loading from "../Loading";
+// ./src/components/StudentNavbar.jsx
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import useUserStore from '../../store/user.store';
+import logo from '../../assets/logo.png';
 
 const StudentNavbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { user, fetchUser, loading, error, logout } = useUserStore();
 
-  const {user, fetchUser, loading, error, logout} = useUserStore();
+    // Fetch user data on component mount
+    useEffect(() => {
+        fetchUser();
+    }, [fetchUser]);
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+    useEffect(()=> {
+      console.log(user)
+    },[user])
 
-  if(loading) return <Loading />
-
-  return (
-    <nav className="bg-red-800 text-white">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center py-4">
-          {/* Left side: Logo and Name */}
-          <Link to='/' className="flex items-center">
-            <div className="text-green-500 text-2xl font-bold mr-2">🌿</div>
-            <span className="text-xl font-semibold">F</span>
-          </Link>
-          <div className="hidden md:flex space-x-4 items-center">
-            <div className="hidden md:flex space-x-4">
-                <a href="#home" className="text-white hover:text-green-500">
-                    Home
-                </a>
-                <a href="#about" className="text-white hover:text-green-500">
-                    About
-                </a>
-                <a href="#features" className="text-white hover:text-green-500">
-                    Features
-                </a>
+    return (
+        <nav className="bg-red-700 max-w-[600px] rounded-md text-white p-3 w-full flex justify-between items-center sticky top-0 z-50 shadow-md">
+            <div className="flex items-center">
+                <Link to="/" className="text-2xl font-bold">
+                    <img src={logo} alt="Logo" className="w-8 h-8" />
+                </Link>
+                <span className="ml-2 text-lg font-semibold">Facys</span>
             </div>
-            <button className="bg-red-950 text-white px-4 py-1 rounded hover:text-red-500" onClick={logout}>
-              Logout
+
+            <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)} 
+                className="focus:outline-none md:hidden"
+            >
+                <svg 
+                    className="w-6 h-6" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24" 
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth="2" 
+                        d="M4 6h16M4 12h16M4 18h16" 
+                    />
+                </svg>
             </button>
-          </div>
-          <div className="md:hidden">
-            <button onClick={toggleMenu} className="focus:outline-none">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
+
+            <div className="hidden md:flex items-center space-x-4">
+                {loading ? (
+                    <div className="w-10 h-10 bg-gray-200 rounded-full animate-pulse"></div>
+                ) : error ? (
+                    <span>Error loading profile</span>
+                ) : (
+                  <Link 
+                  to="/profile" 
+                  className=" rounded-full w-fit px-2 transition py-2 text-gray-700 text-sm hover:bg-gray-100 flex items-center"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+                    <img 
+                        src={user?.pfp || 'https://via.placeholder.com/40'} 
+                        alt="Profile Icon" 
+                        className="rounded-full w-10 h-10"
+                    />
+                    </Link>
+                )}
+                <button 
+                    onClick={logout} 
+                    className="text-sm font-semibold bg-white text-red-700 px-3 py-1 rounded-md"
+                >
+                    Logout
+                </button>
+            </div>
 
-      {/* Mobile menu (Full-screen overlay with animation) */}
-      <div
-        className={`md:hidden fixed inset-0 bg-red-800 text-white z-50 flex flex-col items-center justify-center space-y-6 transform w-full pb-4 transition-all duration-300 ease-in-out ${
-          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
-        }`}
-      >
-        <a
-          href="#home"
-          className="text-xl  hover:text-green-500"
-          onClick={toggleMenu}
-        >
-          Home
-        </a>
-        <a
-          href="#about"
-          className="text-xl hover:text-green-500"
-          onClick={toggleMenu}
-        >
-          About
-        </a>
-        <a
-          href="#features"
-          className="text-xl hover:text-green-500"
-          onClick={toggleMenu}
-        >
-          Features
-        </a>
-        <Link
-          className="text-xl hover:text-green-500"
-          to="/signin"
-        >
-          Login
-        </Link>
-        <Link
-          to="/register"
-          className="bg-green-500 text-white px-6 py-2 rounded text-xl"
-        >
-          Sign Up
-        </Link> 
-
-      </div>
-    </nav>
-  );
+            {/* Mobile Menu Overlay */}
+            {isMenuOpen && (
+                <div className="absolute top-14 right-4 bg-white rounded-lg shadow-lg w-40 py-2 z-10">
+                    <Link 
+                        to="/profile" 
+                        className="block px-4 py-2 text-gray-700 text-sm hover:bg-gray-100 flex items-center"
+                    >
+                        {loading ? (
+                            <div className="w-6 h-6 bg-gray-200 rounded-full animate-pulse mr-2"></div>
+                        ) : error ? (
+                            <span>Error</span>
+                        ) : (
+                            <img 
+                                src={user?.pfp || 'https://via.placeholder.com/40'} 
+                                alt="Profile Icon" 
+                                className="rounded-full w-6 h-6 mr-2"
+                            />
+                        )}
+                        Profile
+                    </Link>
+                    <button 
+                        onClick={logout} 
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                        Logout
+                    </button>
+                </div>
+            )}
+        </nav>
+    );
 };
 
 export default StudentNavbar;

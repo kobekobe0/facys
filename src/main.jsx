@@ -39,6 +39,12 @@ import StudentLogs from './components/StudentLogs'
 import Students from './components/Students'
 import StudentId from './pages/StudentId'
 import WebcamCaptureTest from './components/WebcamCaptureTest'
+import Settings from './pages/Settings'
+import AcademicYear from './components/admin/settings/AcademicYear'
+import AdminAccount from './components/admin/settings/AdminAccount'
+import StudentAccounts from './components/admin/settings/StudentAccounts.jsx'
+import BlockedStudents from './components/BlockedStudents.jsx'
+import SystemLogs from './pages/SystemLogs.jsx'
 
 const router = createBrowserRouter([
   {
@@ -58,6 +64,32 @@ const router = createBrowserRouter([
       {
         path: 'students',
         element: <Students />,
+      },
+      {
+        path: 'blocklist',
+        element: <BlockedStudents />,
+      },
+      {
+        path: 'system-logs',
+        element: <SystemLogs />,
+      },
+      {
+        path: 'settings',
+        element: <Settings />,
+        children:[
+          {
+            path: 'admin-account',
+            element: <AdminAccount />
+          },
+          {
+            path: 'invalid-accounts',
+            element: <StudentAccounts />
+          },
+          {
+            path: 'academic-year',
+            element: <AcademicYear />
+          }
+        ]
       },
       {
         path: 'students/:id',

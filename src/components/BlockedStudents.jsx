@@ -20,7 +20,7 @@ const yearLevels = [
     '4th',
     '5th',
 ]
-function Students() {
+function BlockedStudents() {
     const [logs, setLogs] = useState([]);
     const [name, setName] = useState('');
     const [limit, setLimit] = useState(100);
@@ -46,7 +46,7 @@ function Students() {
             if (department) params.department = department;
             if (yearLevel) params.yearLevel = yearLevel;
     
-            const res = await axios.get(`${API_URL}student/all`, { params });
+            const res = await axios.get(`${API_URL}student/blocked`, { params });
     
             console.log(res.data.docs);
             setLogs(res.data.docs);
@@ -86,7 +86,7 @@ function Students() {
     return (
         <div className='flex p-8 flex-col h-full'>
             <div className='w-full justify-between flex items-center'>
-                <h1 className='text-xl font-semibold'>Students</h1>
+                <h1 className='text-xl font-semibold'>Blocked Students</h1>
             </div>
             <div className="flex items-center text-gray-700 shadow-md rounded p-4 my-4 bg-white justify-between">
                 <div className="flex flex-wrap gap-4 items-center bg-gray-50 rounded-lg shadow-sm">
@@ -190,4 +190,4 @@ function Students() {
     )
 }
 
-export default Students
+export default BlockedStudents

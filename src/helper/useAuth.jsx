@@ -29,7 +29,7 @@ function useAuth() {
         // Decode the JWT to get the role
         const decodedToken = jwtDecode(token);
         const { role } = decodedToken;
-
+        console.log(decodedToken)
         // Verify the token with the backend
         let response = null
         if(role === 'Admin') {

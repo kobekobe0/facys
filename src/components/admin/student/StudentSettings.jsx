@@ -3,12 +3,15 @@ import axios from 'axios';
 import API_URL from '../../../constants/api';
 // import ProfilePicture from './settings/ProfilePicture';
 import toast from 'react-hot-toast';
+import WebcamCapture from '../../WebcamCaptureTest';
+import WebcamCaptureTest from '../../WebcamCaptureTest';
 
 function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
     const [file, setFile] = useState(null);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [details, setDetails] = useState(null);
+    const [schedule, setSchedule] = useState(null);
     const [activeSection, setActiveSection] = useState('account'); // State to control active section
 
     const [confirmBlock, setConfirmBlock] = useState(false);
@@ -33,7 +36,17 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
     const passwordUpdate = async () => {
         if(password !== confirmPassword) return toast.error('Passwords do not match');
         if(password.length < 8) return toast.error('Password must be at least 8 characters long');
-        handlePasswordUpdate(password);
+
+        try {
+            const res = await axios.put(`${API_URL}student/password-by-admin/${student._id}`, { password }, {
+                headers: {
+                    'Authorization': localStorage.getItem('authToken')
+                }
+            });
+            toast.success('Password Updated');
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
     };
 
     const corUpdate = async () => {
@@ -49,8 +62,10 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
                 }
             });
 
-            if(res.data.details.studentNumber !== student.studentNumber) return toast.error('Please upload the COR of the student.');
+            if(res.data.details.studentNumber !== student.studentNumber) return toast.error("Please upload student's COR");
+            console.log(res.data)
             setDetails(res.data.details);
+            setSchedule(res.data.schedules);
             toast.success('COR Uploaded');
         } catch (error) {
             toast.error(error.response.data.message);
@@ -102,20 +117,25 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
     }
 
     const handleSubmitDetails = async () => {
-        async ()=>{
+
+            console.log('clicked')
+            console.log(schedule)
             if(!details) return toast.error('Please upload a COR file first.');
             try {
-                const res = await axios.put(`${API_URL}student/update/${student._id}`, details, {
+                const res = await axios.put(`${API_URL}student/update/${student._id}`, {
+                    ...details,
+                    schedule: JSON.stringify(schedule)
+                }, {
                     headers: {
                         'Authorization': localStorage.getItem('authToken')
                     }
                 });
                 toast.success('Details Updated');
+                window.location.reload()
             } catch (error) {
+                console.log(error)
                 toast.error(error.message);
             }
-        }
-
     };
 
     useEffect(()=> {console.log(student)},[student]);
@@ -150,15 +170,12 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
                         </button>
                     </li>
                     <li>
-                        {/* Profile Update (commented out) */}
-                        {/* 
                         <button
                             className={`w-full text-left px-4 py-2 rounded ${activeSection === 'profile' ? 'bg-red-700 text-white' : 'text-gray-700 hover:bg-red-100'}`}
                             onClick={() => setActiveSection('profile')}
                         >
-                            <i className="fas fa-user-circle mr-2"></i> Profile Picture
+                            <i className="fas fa-user-circle mr-2"></i> Face Data
                         </button>
-                        */}
                     </li>
                 </ul>
             </div>
@@ -315,16 +332,23 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
                                 {file ? <p>{file.name}</p> : <><i className="fas fa-upload mr-2"></i> Select PDF File</>}
                             </button>
 
+                            {
+                                details && (
+                                    <p className='text-green-600/80 font-medium'>
+                                        Details are valid. Proceed to update.
+                                    </p>
+                                )
+                            }
                             {!details ? (
                                 <button
-                                    className="bg-red-700 text-white px-4 w-full py-2 mt-4 rounded hover:bg-red-500 transition duration-200"
+                                    className="border border-red-700 text-red-700 hover:text-white px-4 w-full py-2 mt-4 rounded hover:bg-red-500 transition duration-200"
                                     onClick={corUpdate}
                                 >
                                     Upload COR
                                 </button>
                             ) : (
                                 <button
-                                    className="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-500 transition duration-200"
+                                    className="bg-red-700 text-white px-4 py-2 rounded w-full hover:bg-red-500 transition duration-200"
                                     onClick={handleSubmitDetails}
                                 >
                                     Update Details
@@ -334,15 +358,14 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
                     </div>
                 )}
 
-                {/* Profile Picture Section (commented out) */}
-                {/* 
                 {activeSection === 'profile' && (
                     <div className="flex flex-col">
-                        <h3 className="text-lg font-semibold mb-4">Profile Picture</h3>
-                        <ProfilePicture handlePfpUpdate={handlePfpUpdate} />
+                        <h3 className="text-lg font-semibold">Profile Picture</h3>
+                        <p className='mb-8'>Update Student's Face data in the system.</p>
+                        <WebcamCaptureTest id={student._id}/>
                     </div>
                 )}
-                */}
+
             </div>
         </div>
     );
