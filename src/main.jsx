@@ -45,6 +45,7 @@ import AdminAccount from './components/admin/settings/AdminAccount'
 import StudentAccounts from './components/admin/settings/StudentAccounts.jsx'
 import BlockedStudents from './components/BlockedStudents.jsx'
 import SystemLogs from './pages/SystemLogs.jsx'
+import StudentProfile from './pages/StudentProfile.jsx'
 
 const router = createBrowserRouter([
   {
@@ -99,9 +100,17 @@ const router = createBrowserRouter([
   },
   {
     path: '/student',
-    element: <StudentHome />,
     errorElement: <Error/>,
-    children:[]
+    children:[
+      {
+        index: true,
+        element: <StudentHome />,
+      },
+      {
+        path: "profile",
+        element: <StudentProfile />
+      }
+    ]
   },
   {
     path: '/register',
