@@ -66,42 +66,49 @@ const FaceCapture = ({ start, handleSend }) => {
 
     useEffect(() => {
         const startDetection = () => {
+            if (detectIntervalRef.current) return; // Prevent duplicate intervals
+    
             detectIntervalRef.current = setInterval(async () => {
                 if (videoRef.current && !faceDetectedRef.current && isDetecting) {
                     const result = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
                         .withFaceLandmarks()
                         .withFaceDescriptor();
-
+    
                     if (result) {
                         faceDetectedRef.current = true;
-                        console.log("Face detected, starting 2-second check...");
-
-                        setTimeout(async () => {
-                            const confirmResult = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
-                                .withFaceLandmarks()
-                                .withFaceDescriptor();
-
-                            if (confirmResult) {
-                                console.log("Face confirmed for 2 seconds. Sending face descriptors.");
-                                handleSend(confirmResult.descriptor);
-                                faceDetectedRef.current = false;
-                            } else {
-                                console.log("Face changed, resetting.");
-                                faceDetectedRef.current = false;
-                            }
-                        }, 2000);
+                        console.log("Face detected, starting 5-second check...");
+    
+                        // Pause detection temporarily
+                        clearInterval(detectIntervalRef.current);
+                        detectIntervalRef.current = null; // Clear interval reference
+    
+                        const confirmResult = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+                            .withFaceLandmarks()
+                            .withFaceDescriptor();
+    
+                        if (confirmResult) {
+                            console.log("Face confirmed for 5 seconds. Sending face descriptors.");
+                            handleSend(confirmResult.descriptor);
+                        } else {
+                            console.log("Face changed, resetting.");
+                        }
+    
+                        // Reset face detection and resume interval
+                        faceDetectedRef.current = false;
+                        startDetection(); // Restart detection after confirmation check
                     }
                 }
-            }, 200); // Detect every 200ms
+            }, 3000); // Detect every 3000ms
         };
-
+    
         if (isDetecting) {
             startDetection();
         }
-
+    
         return () => {
             if (detectIntervalRef.current) {
                 clearInterval(detectIntervalRef.current);
+                detectIntervalRef.current = null; // Ensure interval is fully cleared
             }
         };
     }, [isDetecting]);
