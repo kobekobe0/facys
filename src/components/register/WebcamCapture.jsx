@@ -134,8 +134,7 @@ const WebcamCapture = ({ setFaceData, next, back, setScreenshot, screenshot }) =
                 console.log("Face box dimensions:", faceBox.width, faceBox.height);
                 console.log("Required circle diameter:", circleDiameter);
     
-                if (faceBox.width >= circleDiameter && faceBox.height >= circleDiameter) {
-                    // Face is close enough
+
                     setConfidence(detections.detection.score.toFixed(2));
     
                     if (detections.detection.score >= 0.6) {
@@ -143,20 +142,14 @@ const WebcamCapture = ({ setFaceData, next, back, setScreenshot, screenshot }) =
                         if (!timerRef.current) {
                             timerRef.current = setTimeout(() => {
                                 capture(); // Capture the image after 3 seconds of continuous detection
-                            }, 3000);
+                            }, 1500);
                         }
                     } else {
                         clearTimeout(timerRef.current);
                         timerRef.current = null;
                         setConfidence(null);
                     }
-                } else {
-                    // Face is too far away; ask the user to move closer
-                    console.log("Face too far, please move closer.");
-                    setConfidence(null);
-                    clearTimeout(timerRef.current);
-                    timerRef.current = null;
-                }
+
             } else {
                 // No face detected, reset timer
                 console.log("No face detected, resetting timer");
@@ -202,12 +195,6 @@ const WebcamCapture = ({ setFaceData, next, back, setScreenshot, screenshot }) =
                     <div className='flex flex-col gap-4 items-center'>
                         <button className='bg-red-600 text-xs text-white rounded-md p-2' onClick={() => setStart(true)}>Start Face Detection</button>
                     </div>
-                )
-            }
-
-            {
-                confidence === null && start && (
-                    <p className="text-red-500 text-sm mt-4 p-4 absolute bg-white shadow-lg font-medium">Please move closer to the camera.</p>
                 )
             }
         </div>

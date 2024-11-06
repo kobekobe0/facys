@@ -3,12 +3,13 @@ import * as faceapi from 'face-api.js';
 import MODEL_URL from '../../../constants/model';
 import toast from 'react-hot-toast';
 
-const FaceCapture = ({ start, handleSend }) => {
+const FaceCapture = ({ start, handleSend, setStudent }) => {
     const videoRef = useRef(null);
     const [modelsLoaded, setModelsLoaded] = useState(false);
     const [isDetecting, setIsDetecting] = useState(false);
     const faceDetectedRef = useRef(false);
     const detectIntervalRef = useRef(null);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         // Load models once when the component mounts
@@ -17,7 +18,8 @@ const FaceCapture = ({ start, handleSend }) => {
                 await Promise.all([
                     faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
                     faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-                    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+                    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL) // Load expression model
                 ]);
                 setModelsLoaded(true);
                 console.log("Models loaded successfully");
@@ -53,11 +55,9 @@ const FaceCapture = ({ start, handleSend }) => {
 
     useEffect(() => {
         if (start && modelsLoaded) {
-            // Start the camera and detection if start is true and models are loaded
             setupCamera();
             setIsDetecting(true);
         } else {
-            // Stop the camera and detection if start is false
             stopCamera();
             setIsDetecting(false);
         }
@@ -72,33 +72,45 @@ const FaceCapture = ({ start, handleSend }) => {
                 if (videoRef.current && !faceDetectedRef.current && isDetecting) {
                     const result = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
                         .withFaceLandmarks()
-                        .withFaceDescriptor();
+                        .withFaceDescriptor()
+                        .withFaceExpressions(); // Include expressions in detection
     
                     if (result) {
-                        faceDetectedRef.current = true;
-                        console.log("Face detected, starting 5-second check...");
+                        const isSmiling = result.expressions.happy > 0.7; // Adjust threshold as needed
     
-                        // Pause detection temporarily
-                        clearInterval(detectIntervalRef.current);
-                        detectIntervalRef.current = null; // Clear interval reference
+                        if (isSmiling) {
+                            faceDetectedRef.current = true;
+                            setMessage(""); // Clear message if smiling
+                            console.log("Face detected with smile, starting 5-second check...");
     
-                        const confirmResult = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
-                            .withFaceLandmarks()
-                            .withFaceDescriptor();
+                            // Pause detection temporarily
+                            clearInterval(detectIntervalRef.current);
+                            detectIntervalRef.current = null;
     
-                        if (confirmResult) {
-                            console.log("Face confirmed for 5 seconds. Sending face descriptors.");
-                            handleSend(confirmResult.descriptor);
+                            const confirmResult = await faceapi.detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
+                                .withFaceLandmarks()
+                                .withFaceDescriptor()
+                                .withFaceExpressions(); // Check expression again
+    
+                            if (confirmResult && confirmResult.expressions.happy > 0.7) {
+                                console.log("Face confirmed with smile. Sending face descriptors.");
+                                handleSend(confirmResult.descriptor);
+                            } else {
+                                console.log("Smile changed, resetting.");
+                            }
+    
+                            // Reset face detection and resume interval
+                            faceDetectedRef.current = false;
+                            startDetection(); // Restart detection after confirmation check
                         } else {
-                            console.log("Face changed, resetting.");
+                            setMessage("Please smile"); // Show smile prompt if not smiling
                         }
-    
-                        // Reset face detection and resume interval
-                        faceDetectedRef.current = false;
-                        startDetection(); // Restart detection after confirmation check
+                    } else {
+                        setMessage("")
+                        setStudent(null)
                     }
                 }
-            }, 3000); // Detect every 3000ms
+            }, 2000); // Detect every 3000ms
         };
     
         if (isDetecting) {
@@ -114,9 +126,16 @@ const FaceCapture = ({ start, handleSend }) => {
     }, [isDetecting]);
 
     return (
-        <div>
+        <div className="relative">
+            {message && (
+                <p className="absolute inset-0 flex margin-auto w-full items-center justify-center text-white text-xl py-2 font-semibold bg-red-600 bg-opacity-75">
+                    {message}
+                </p>
+            )}
             <video ref={videoRef} autoPlay style={{ width: '100%' }} />
+
         </div>
+
     );
 };
 

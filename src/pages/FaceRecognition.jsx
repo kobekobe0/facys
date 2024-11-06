@@ -74,7 +74,7 @@ function FaceRecognition() {
                     }
                     {
                         start && (
-                            <FaceCapture start={start} handleSend={handleSend} /> 
+                            <FaceCapture start={start} handleSend={handleSend} setStudent={setStudent} /> 
                         )
                     }
                 </div>
@@ -121,6 +121,12 @@ function FaceRecognition() {
                     <div className='w-full flex mt-8 items-center justify-center'>
                         <button onClick={handleCreateLog} className={`p-2 w-full  text-white rounded text-sm ${!student || automatic ? 'bg-gray-500/30' : 'bg-red-600 hover:bg-red-700'} transition`} disabled={!student || automatic}>Create Student Log</button>
                     </div>
+                    {
+                        student && (
+                            <img src={student?.pfp} alt="Student" className='w-[200px] h-[200px] object-cover mt-4' />
+                        )
+                    }
+                    
                 </div>
 
 

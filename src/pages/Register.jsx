@@ -11,6 +11,7 @@ import Tabs from "../components/Tabs";
 import logo from '../assets/logo.png';
 import DragAndDrop from "../components/register/DragAnddrop";
 import CheckDetails from "../components/register/details";
+import SetFaceData from "../components/register/SetFaceData";
 
 /*
 
@@ -23,6 +24,8 @@ const Register = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [file, setFile] = useState(null);
     const [faceData, setFaceData] = useState(null);
+    const [faceData2, setFaceData2] = useState(null);
+    const [faceData3, setFaceData3] = useState(null);
     const [screenshot, setScreenshot] = useState(null);
     const [details, setDetails] = useState({
       studentNumber: '',
@@ -48,8 +51,10 @@ const Register = () => {
                 'Content-Type': 'multipart/form-data'
             }
         }).catch(error => {
+            console.log(error.response.data.message)
             toast.dismiss();
             toast.error(error.response.data.message)
+            return
         });
 
         if(response.status === 200) {
@@ -61,10 +66,6 @@ const Register = () => {
             setSchedule(response?.data?.schedules);
             console.log(response.data);
             setActiveTab(activeTab + 1);
-        }
-        if(response.status === 400) {
-            toast.dismiss();
-            console.log(response.data.message);
         }
       } catch (error){
         toast.dismiss();
@@ -114,61 +115,79 @@ const Register = () => {
       setScreenshot(null);
     }
     const handleSubmit = async () => {
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if (email === '' || password === '' || confirmPassword === '') return toast.error("Please fill in all fields");
-        if (!emailRegex.test(email)) return toast.error("Invalid email address");
-        if (password !== confirmPassword) return toast.error("Passwords do not match");
-        if (password.length < 8) return toast.error("Password must be at least 8 characters long");
-    
-        toast.loading("Uploading data...");
-    
-        try {
-            // Create a new FormData object
-            const formData = new FormData();
-    
-            // Append text fields to FormData
-            formData.append("studentNumber", details.studentNumber);
-            formData.append("name", details.studentName);
-            formData.append("schedule", JSON.stringify(schedule));
-            formData.append("department", details.department);
-            formData.append("sex", details.sex);
-            formData.append("dateOfBirth", details.dateOfBirth);
-            formData.append("degree", details.degree);
-            formData.append("section", details.section);
-            formData.append("SY", `AY ${details.SY.start} - ${details.SY.end} ${details.SY.semester} Semester`);
-            formData.append("yearLevel", details.yearLevel);
-            formData.append("email", email);
-            formData.append("password", password);
-    
-            // Append the faceData as a JSON string
-            formData.append("faceData", JSON.stringify(faceData));
-    
-            // Append the screenshot image file
-            if (screenshot) {
-                console.log("Screenshot data URL:", screenshot); // Debug log
-                const response = await fetch(screenshot);
-                const blob = await response.blob();
-                console.log(blob)
-                formData.append("image", blob, "screenshot.jpg"); // Append with a file name
-            }
-    
-            // Send the FormData with Axios
-            const response = await axios.post(`${API_URL}student/create`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-    
-            console.log(response.data);
-            toast.dismiss();
-            toast.success("Registration successful.");
-            navigate('/');
-        } catch (error) {
-            toast.dismiss();
-            toast.error(error.response?.data?.message || "Registration failed.");
-            console.error(error);
-        }
-    };
+
+      console.log("Main Descriptor:", faceData);
+console.log("Support Descriptor 1:", faceData2);
+console.log("Support Descriptor 2:", faceData3);
+
+      
+
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      if (email === '' || password === '' || confirmPassword === '') return toast.error("Please fill in all fields");
+      if (!emailRegex.test(email)) return toast.error("Invalid email address");
+      if (password !== confirmPassword) return toast.error("Passwords do not match");
+      if (password.length < 8) return toast.error("Password must be at least 8 characters long");
+  
+      if (!faceData || !faceData2 || !faceData3) {
+          return toast.error("Please upload all required face images.");
+      }
+  
+      toast.loading("Uploading data...");
+      
+  
+      try {
+          // Create a new FormData object
+          const formData = new FormData();
+  
+          // Append text fields to FormData
+          formData.append("studentNumber", details.studentNumber);
+          formData.append("name", details.studentName);
+          formData.append("schedule", JSON.stringify(schedule));
+          formData.append("department", details.department);
+          formData.append("sex", details.sex);
+          formData.append("dateOfBirth", details.dateOfBirth);
+          formData.append("degree", details.degree);
+          formData.append("section", details.section);
+          formData.append("SY", `AY ${details.SY.start} - ${details.SY.end} ${details.SY.semester} Semester`);
+          formData.append("yearLevel", details.yearLevel);
+          formData.append("email", email);
+          formData.append("password", password);
+  
+          // Prepare face data structure
+          const faceDataPayload = {
+              mainDescriptor: Array.from(faceData),            // Main descriptor as array
+              supportDescriptor1: Array.from(faceData2),       // First support descriptor as array
+              supportDescriptor2: Array.from(faceData3),       // Second support descriptor as array
+          };
+          
+          // Append faceData as a JSON string
+          formData.append("faceData", JSON.stringify(faceDataPayload));
+  
+          // Append the screenshot image file
+          if (screenshot) {
+              const response = await fetch(screenshot);
+              const blob = await response.blob();
+              formData.append("image", blob, "screenshot.jpg"); // Append with a file name
+          }
+  
+          // Send the FormData with Axios
+          const response = await axios.post(`${API_URL}student/create`, formData, {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+          });
+  
+          console.log(response.data);
+          toast.dismiss();
+          toast.success("Registration successful.");
+          navigate('/');
+      } catch (error) {
+          toast.dismiss();
+          toast.error(error.response?.data?.message || "Registration failed.");
+          console.error(error);
+      }
+  };
+  
   
     return (
       <main className="flex flex-col h-[100vh] overflow-scroll items-center">
@@ -204,14 +223,15 @@ const Register = () => {
             {
               activeTab === 3 && (
                 <div>
-                  <h2 className="text-2xl">Confirm Registration</h2>
-                  <p className="text-sm mb-4">Does this photo resembles your face?</p>
-                  <img src={screenshot} alt="" className="h-[380px] w-[320px] object-cover"/>
-                  <div className="flex mt-4 gap-4 justify-end">
-                    <button className="flex items-center border-red-700 border rounded text-red-700 gap-2 px-2 py-1" onClick={() => handleRetry(1)}><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16"><path fill="#c20000" fill-rule="evenodd" d="M7.32.029a8 8 0 0 1 7.18 3.307V1.75a.75.75 0 0 1 1.5 0V6h-4.25a.75.75 0 0 1 0-1.5h1.727A6.5 6.5 0 0 0 1.694 6.424A.75.75 0 1 1 .239 6.06A8 8 0 0 1 7.319.03Zm-3.4 14.852A8 8 0 0 0 15.76 9.94a.75.75 0 0 0-1.455-.364A6.5 6.5 0 0 1 2.523 11.5H4.25a.75.75 0 0 0 0-1.5H0v4.25a.75.75 0 0 0 1.5 0v-1.586a8 8 0 0 0 2.42 2.217" clip-rule="evenodd"/></svg>Retry</button>
-                    <button className="border border-red-700 text-white bg-red-700 rounded px-2 py-1" onClick={()=>setActiveTab(activeTab+1)}>Submit</button>
-                  </div>
-                  
+                  <SetFaceData
+                      faceData={faceData}
+                      setFaceData2={setFaceData2}
+                      setFaceData3={setFaceData3}
+                      activeTab={activeTab}
+                      setActiveTab={setActiveTab}
+                      screenshot={screenshot}
+                      handleRetry={handleRetry}
+                    />
                 </div>
               )
             }
