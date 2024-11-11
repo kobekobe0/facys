@@ -30,6 +30,7 @@ function FaceRecognition() {
     },[student])
 
     const handleCreateLog = async () => {
+        console.log("LOG")
         if(!student) return;
 
         const res = await axios.post(`${API_URL}log/`, {
@@ -39,7 +40,6 @@ function FaceRecognition() {
             if(automatic) return 
             setStudent(null);
         }).catch(err => {
-            if(automatic) return
             setStudent(null);
             toast.error(err.response.data.message);
         });

@@ -73,16 +73,22 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
     };
 
     const handleConfirmBlock = async () => {
+        if(!adminPassword) return toast.error('Please enter the admin password');
+        toast.loading('Blocking Account');
         try {
-            const res = await axios.put(`${API_URL}student/block/${student._id}`, {}, {
+            const res = await axios.put(`${API_URL}student/block/${student._id}`, {password: adminPassword}, {
                 headers: {
                     'Authorization': localStorage.getItem('authToken')
                 }
             });
+            toast.dismiss()
             toast.success('Account Blocked');
             window.location.reload();
         } catch (error) {
-            toast.error(error.data.message);
+            setAdminPassword("")
+            toast.dismiss()
+            console.log(error)
+            toast.error(error.response.data.message);
         }
     }
     const handleConfirmDelete = async () => {
@@ -103,16 +109,23 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
         }
     }
     const handleConfirmUnblock = async () => {
+        if(!adminPassword) return toast.error('Please enter the admin password');
+        toast.loading('Deleting Account');
         try {
-            const res = await axios.put(`${API_URL}student/unblock/${student._id}`, {}, {
+            const res = await axios.put(`${API_URL}student/unblock/${student._id}`, {
+                password: adminPassword
+            }, {
                 headers: {
                     'Authorization': localStorage.getItem('authToken')
                 }
             });
+            toast.dismiss()
             toast.success('Account Unblocked');
             window.location.reload();
         } catch (error) {
-            toast.error(error.message);
+            setAdminPassword('')
+            toast.dismiss()
+            toast.error(error.response.data.message);
         }
     }
 
@@ -207,6 +220,8 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
                                                 <p>
                                                     Are you sure you want to unblock this account?
                                                 </p>
+                                                <input value={adminPassword} onChange={e=>setAdminPassword(e.target.value)} type="password" placeholder='Enter admin password' className='px-2 w-full py-2 rounded my-4 border border-gray-300'/>
+
                                                 <div className='flex gap-4 items-center'>
                                                     <button onClick={()=>setConfirmBlock(false)} className="mt-3 px-4 py-2 text-xs hover:bg-red-600 hover:text-white text-red-600 border rounded border-red-600 transition">
                                                         Cancel
@@ -242,6 +257,7 @@ function StudentSettings({ student, handlePfpUpdate, handlePasswordUpdate }) {
                                                 <p>
                                                     Are you sure you want to block this account?
                                                 </p>
+                                                <input value={adminPassword} onChange={e=>setAdminPassword(e.target.value)} type="password" placeholder='Enter admin password' className='px-2 w-full py-2 rounded my-4 border border-gray-300'/>
                                                 <div className='flex gap-4 items-center'>
                                                     <button onClick={()=>setConfirmBlock(false)} className="mt-3 px-4 py-2 text-xs hover:bg-red-600 hover:text-white text-red-600 border rounded border-red-600 transition">
                                                         Cancel

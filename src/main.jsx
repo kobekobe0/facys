@@ -46,6 +46,10 @@ import StudentAccounts from './components/admin/settings/StudentAccounts.jsx'
 import BlockedStudents from './components/BlockedStudents.jsx'
 import SystemLogs from './pages/SystemLogs.jsx'
 import StudentProfile from './pages/StudentProfile.jsx'
+import OutdatedStudent from './components/OutdatedStudent.jsx'
+import ResetPasswordAdmin from './pages/ResetPasswordAdmin.jsx'
+import ChangePasswordAdmin from './pages/ResestPasswordAdminChange.jsx'
+import Dashboard from './pages/Dashboard.jsx'
 
 const router = createBrowserRouter([
   {
@@ -56,6 +60,10 @@ const router = createBrowserRouter([
     children:[
       {
         index: true,
+        element: <Dashboard />,
+      },
+      {
+        path:'scan',
         element: <FaceRecognition />,
       },
       {
@@ -69,6 +77,10 @@ const router = createBrowserRouter([
       {
         path: 'blocklist',
         element: <BlockedStudents />,
+      },
+      {
+        path: 'outdated',
+        element: <OutdatedStudent />,
       },
       {
         path: 'system-logs',
@@ -136,6 +148,15 @@ const router = createBrowserRouter([
     path: '/forgot-password/:id',
     element: <ChangePassword />
   },
+  {
+    path: '/admin-forgot-password/:id',
+    element: <ChangePasswordAdmin />
+  },
+  {
+    path: 'admin/forgot-password',
+    element: <ResetPasswordAdmin />
+  },
+
   {
     path: '/test',
     element: <Webcam />

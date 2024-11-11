@@ -88,7 +88,7 @@ const LoginPage = () => {
                     />
                 </div>
                 <div className="flex flex-col space-y-4">
-                    <Link to="/forgot-password" className="text-red-800"><span className="text-black">Forgot your password?</span> Reset here</Link>
+                    <Link to="/admin/forgot-password" className="text-red-800"><span className="text-black">Forgot your password?</span> Reset here</Link>
                 </div>
 
                 <div className="w-full mt-8">

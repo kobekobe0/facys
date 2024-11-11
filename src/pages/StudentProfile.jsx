@@ -5,6 +5,9 @@ import CORUpdate from '../components/student/CORUpdate';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import API_URL from '../constants/api';
+import { useNavigate } from 'react-router-dom';
+import WebcamCapture from '../components/register/WebcamCapture';
+import CaptureUpdate from '../components/admin/student/CaptureUpdate';
 
 const StudentProfile = () => {
     const [activeTab, setActiveTab] = useState('details');
@@ -64,14 +67,15 @@ const StudentProfile = () => {
         }
     }
 
+    const navigate = useNavigate()
+
 
     return (
         <div className="min-h-screen bg-gray-100 text-gray-800 p-6">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-                <button className="text-red-600">←</button> {/* Back button */}
+            <div className="flex items-center justify-start gap-4 mb-6">
+                <button onClick={()=>navigate('/student')} className="text-red-600 font-bold text-2xl">←</button> {/* Back button */}
                 <h1 className="text-xl font-medium text-red-700">Profile</h1>
-                <button className="text-gray-500">⋮</button> {/* Menu button */}
             </div>
 
             {/* Profile Picture and Name */}
@@ -163,7 +167,7 @@ const StudentProfile = () => {
                 {activeTab === 'cor-update' && (
                     <CORUpdate student={student} />
                 )}
-                {activeTab === 'face-data' && <div>Face data content goes here.</div>}
+                {activeTab === 'face-data' && <CaptureUpdate/>}
             </div>
 
             {/* Contact Button */}
