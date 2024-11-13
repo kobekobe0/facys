@@ -107,7 +107,6 @@ const FaceCapture = ({ start, handleSend, setStudent }) => {
                         }
                     } else {
                         setMessage("")
-                        setStudent(null)
                     }
                 }
             }, 2000); // Detect every 3000ms

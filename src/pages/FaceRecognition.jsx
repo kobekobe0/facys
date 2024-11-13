@@ -8,31 +8,45 @@ function FaceRecognition() {
     const [start, setStart] = useState(false);
     const [student, setStudent] = useState(null);
     const [automatic, setAutomatic] = useState(false);
+    const [isVisitor, setIsVisitor] = useState(false);
+
+    const [purpose, setPurpose] = useState('') ;
 
     const handleSend = async (faceData) => {
+        if(!faceData) return;
         const res = await axios.post(`${API_URL}face/scan`, {
             faceData
         }).then(res => {
             console.log(res.data);
             setStudent(res.data.student);
-            toast.success('Student found');
+            setIsVisitor(res.data.isVisitor)
+            toast.success('Face scanned successfully');
         }).catch(err => {
-            toast.error(err.response.data.message);
-            setStudent(null)
+            console.log("EEE")
+            toast.error("DDD", err.response.data.message);
         });
     }
 
-    useEffect(()=> {
-        if(!student) return
-        if(automatic) {
+    useEffect(() => {
+        if (!student) return;
+    
+        // Turn off automatic mode if the scanned face is a visitor
+        if (isVisitor) {
+            setAutomatic(false);
+            return;
+        }
+    
+        // Automatically create a log for students if automatic mode is on
+        if (automatic) {
+            console.log("AUTO");
             handleCreateLog();
         }
-    },[student])
+    }, [student, isVisitor, automatic]);
 
     const handleCreateLog = async () => {
-        console.log("LOG")
+        console.log("STUDENT LOG")
         if(!student) return;
-
+        console.log(student)
         const res = await axios.post(`${API_URL}log/`, {
             studentID: student._id
         }).then(res => {
@@ -40,7 +54,26 @@ function FaceRecognition() {
             if(automatic) return 
             setStudent(null);
         }).catch(err => {
+            console.log(err)
             setStudent(null);
+            toast.error(err.response.data.message);
+        });
+    }
+    const handleCreateVisitorLog = async () => {
+        console.log("VISITOR LOG", student)
+        if(!student) return;
+        if(!purpose) return toast.error('Purpose is required');
+
+        const res = await axios.post(`${API_URL}visitor/log`, {
+            visitorID: student._id,
+            purpose
+        }).then(res => {
+            toast.success('Visitor log created');
+            setPurpose('');
+            setStudent(null);
+        }).catch(err => {
+            setStudent(null);
+            console.log(err)
             toast.error(err.response.data.message);
         });
     }
@@ -78,57 +111,99 @@ function FaceRecognition() {
                         )
                     }
                 </div>
-                <div className='w-1/3 h-fit'>
-                    <h2 className='my-4 font-medium'>Student Details</h2>
-                    <div className="overflow-x-auto h-full">
-                        <table className="min-w-full bg-white border border-gray-300 h-full">
-                            <tbody className="text-gray-600 text-sm font-light">
-                                <tr className="border-b border-gray-200">
-                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Student Number</td>
-                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.studentNumber || 'N/A'}</td>
-                                </tr>
-                                <tr className="border-b border-gray-200">
-                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Name</td>
-                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.name || 'N/A'}</td>
-                                </tr>
-                                <tr className="border-b border-gray-200">
-                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Date of Birth</td>
-                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.dateOfBirth || 'N/A'}</td>
-                                </tr>
-                                <tr className="border-b border-gray-200">
-                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Degree</td>
-                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.degree || 'N/A'}</td>
-                                </tr>
-                                <tr className="border-b border-gray-200">
-                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Department</td>
-                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.department || 'N/A'}</td>
-                                </tr>
-                                <tr className="border-b border-gray-200">
-                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Section</td>
-                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.section || 'N/A'}</td>
-                                </tr>
-                                <tr className="border-b border-gray-200">
-                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">School Year</td>
-                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.SY || 'N/A'}</td>
-                                </tr>
-                                <tr className="border-b border-gray-200">
-                                    <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Year Level</td>
-                                    <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.yearLevel || 'N/A'}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className='w-full flex mt-8 items-center justify-center'>
-                        <button onClick={handleCreateLog} className={`p-2 w-full  text-white rounded text-sm ${!student || automatic ? 'bg-gray-500/30' : 'bg-red-600 hover:bg-red-700'} transition`} disabled={!student || automatic}>Create Student Log</button>
-                    </div>
-                    {
-                        student && (
-                            <img src={student?.pfp} alt="Student" className='w-[200px] h-[200px] object-cover mt-4' />
-                        )
-                    }
-                    
-                </div>
-
+                {
+                    isVisitor ? (
+                        <div className='w-1/3 h-fit'>
+                            <h2 className='my-4 font-medium'>Visitor Details</h2>
+                            <div className="overflow-x-auto h-full">
+                                <table className="min-w-full bg-white border border-gray-300 h-full">
+                                    <tbody className="text-gray-600 text-sm font-light">
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Name</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.name || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Address</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.address || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Contact Number</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.contactNumber || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Email</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.email || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Date of Birth</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.dateOfBirth || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Organization</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.organization || 'N/A'}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div className='flex flex-col'>
+                                    <label className='text-xs font-medium my-4'>Purpose</label>
+                                    <input type="text" value={purpose} onChange={(e) => setPurpose(e.target.value)} className="border border-gray-300 rounded p-2"/>
+                                    <button onClick={handleCreateVisitorLog} className='p-2 bg-red-500 rounded text-white text-xs mt-4'>Create Log</button>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className='w-1/3 h-fit'>
+                            <h2 className='my-4 font-medium'>Student Details</h2>
+                            <div className="overflow-x-auto h-full">
+                                <table className="min-w-full bg-white border border-gray-300 h-full">
+                                    <tbody className="text-gray-600 text-sm font-light">
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Student Number</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.studentNumber || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Name</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.name || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Date of Birth</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.dateOfBirth || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Degree</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.degree || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Department</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.department || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Section</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.section || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">School Year</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.SY || 'N/A'}</td>
+                                        </tr>
+                                        <tr className="border-b border-gray-200">
+                                            <td className="py-3 px-6 bg-gray-200 font-semibold text-left w-1/4">Year Level</td>
+                                            <td className="py-3 px-6 text-left w-3/4 font-medium">{student?.yearLevel || 'N/A'}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className='w-full flex mt-8 items-center justify-center'>
+                                <button onClick={handleCreateLog} className={`p-2 w-full  text-white rounded text-sm ${!student || automatic ? 'bg-gray-500/30' : 'bg-red-600 hover:bg-red-700'} transition`} disabled={!student || automatic}>Create Student Log</button>
+                            </div>
+                            {
+                                student && (
+                                    <img src={student?.pfp} alt="Student" className='w-[200px] h-[200px] object-cover mt-4' />
+                                )
+                            }
+                            
+                        </div>
+                    )
+                }
 
             </div>
         </div>

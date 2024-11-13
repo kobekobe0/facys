@@ -50,6 +50,9 @@ import OutdatedStudent from './components/OutdatedStudent.jsx'
 import ResetPasswordAdmin from './pages/ResetPasswordAdmin.jsx'
 import ChangePasswordAdmin from './pages/ResestPasswordAdminChange.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import Visitors from './components/Visitors.jsx'
+import VisitorLogs from './components/VisitorsLogs.jsx'
+import VisitorCreate from './components/VisitorCreate.jsx'
 
 const router = createBrowserRouter([
   {
@@ -65,6 +68,18 @@ const router = createBrowserRouter([
       {
         path:'scan',
         element: <FaceRecognition />,
+      },
+      {
+        path: 'visitors',
+        element: <Visitors />,
+      },
+      {
+        path: 'visitors/create',
+        element: <VisitorCreate />,
+      },
+      {
+        path: 'visitor-logs',
+        element: <VisitorLogs />,
       },
       {
         path: 'logs',
