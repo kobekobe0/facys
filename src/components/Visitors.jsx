@@ -5,6 +5,7 @@ import API_URL from "../constants/api";
 import debounce from "../helper/debounce";
 import abbreviate from "../helper/abbreviate";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const yearLevels = [
     '1st',
@@ -21,11 +22,8 @@ function Visitors() {
     const [department, setDepartment] = useState(null);
     const [yearLevel, setYearLevel] = useState(null);
     const [page, setPage] = useState(1);
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-
-    const [colleges, setColleges] = useState([]);
-
+    const [password, setPassword] = useState('')
+    const [selectedItem, setSelectedItem] = useState(null);
     const fetchLogs = async () => {
         if(department === 'null') setDepartment(null);
         if(yearLevel === 'null') setYearLevel(null);
@@ -35,16 +33,40 @@ function Visitors() {
             if (name) params.name = name; 
             if (limit) params.limit = limit;
             if (page) params.page = page;
-            if (startDate) params.startDate = startDate;
-            if (endDate) params.endDate = endDate;
-            if (department) params.department = department;
-            if (yearLevel) params.yearLevel = yearLevel;
     
-            const res = await axios.get(`${API_URL}student/all`, { params });
+            const res = await axios.get(`${API_URL}visitor/visitors`, { params });
     
             console.log(res.data.docs);
             setLogs(res.data.docs);
         } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const handleDelete = async () => {
+        console.log('asdasd')
+        if(!password) {
+            alert('Please enter password');
+            return;
+        }
+        console.log(selectedItem)
+        toast.loading('Deleting visitor');
+        try {
+            const res = await axios.delete(`${API_URL}visitor/delete/${selectedItem}?password=${password}`, {
+                headers: {
+                    Authorization: `${localStorage.getItem('authToken')}`
+                }
+            });
+            console.log(res.data);
+            setPassword('');
+            setSelectedItem(null);
+            toast.dismiss()
+            toast.success('Visitor deleted successfully');
+            fetchLogs();
+        } catch (err) {
+            toast.dismiss()
+            setPassword('');
+            toast.error('Error deleting visitor');
             console.error(err);
         }
     }
@@ -68,9 +90,8 @@ function Visitors() {
     };
 
     useEffect(() => {
-        console.log(department, yearLevel)
         fetchLogs();
-    }, [name, limit, page, startDate, endDate, department, yearLevel])
+    }, [name, limit, page])
 
     useEffect(() => {
         fetchLogs();
@@ -85,10 +106,10 @@ function Visitors() {
                     Register
                 </button>
             </div>
-            <div className="flex items-center text-gray-700 shadow-md rounded p-4 my-4 bg-white justify-between">
-                <div className="flex flex-col">
-                    <label htmlFor="" className="text-xs my-2">Student Name</label>
-                    <input type="text" name="" id="" onChange={handleChange} className="border border-gray-300 rounded px-2 py-1" placeholder="Student Name"/>
+            <div className="flex items-center text-gray-700 shadow-md rounded p-4 my-4 bg-white justify-end">
+                <div className="flex items-center gap-4">
+                    <label htmlFor="" className="text-xs my-2">Visitor Name</label>
+                    <input type="text" name="" id="" onChange={handleChange} className="border border-gray-300 rounded px-2 py-1" placeholder="Visitor Name"/>
                 </div>
             </div>
             <div className="p-4 bg-white rounded shadow-md flex-grow">
@@ -97,11 +118,12 @@ function Visitors() {
                         <thead>
                             <tr className="bg-gray-200">
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Image</th>
-                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Student Name</th>
-                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Student Number</th>
-                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Department</th>
-                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Year Level</th>
-                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Section</th>
+                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Name</th>
+                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Address</th>
+                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Contact No</th>
+                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Email</th>
+                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Date of Birth</th>
+                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Organization</th>
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Action</th>
                             </tr>
                         </thead>
@@ -114,12 +136,13 @@ function Visitors() {
                                         </div>
                                     </td>
                                     <td className="p-2">{log?.name}</td>
-                                    <td className="p-2">{log?.studentNumber}</td>
-                                    <td className="p-2">{log?.department}</td>
-                                    <td className="p-2">{log?.yearLevel}</td>
-                                    <td className="p-2">{log?.section}</td>
-                                    <td className="p-2 flex item-center h-full justify-center font-bold gap-2">
-                                        <Link to={`/admin/students/${log._id}`} className=' text-blue-500 border-blue-500  text-xs px-2 rounded py-1'>View</Link>
+                                    <td className="p-2">{log?.address}</td>
+                                    <td className="p-2">{log?.contactNumber}</td>
+                                    <td className="p-2">{log?.email}</td>
+                                    <td className="p-2">{log?.dateOfBirth.split('T')[0]}</td>
+                                    <td className="p-2">{log?.organization}</td>
+                                    <td className="p-2 flex item-center h-[75px] justify-center font-bold gap-2">
+                                        <button onClick={()=>setSelectedItem(log._id)} className=' text-red-500 border-red-500  text-xs px-2 rounded py-1'>Delete</button>
                                     </td>
                                 </tr>
                             ))}
@@ -132,10 +155,33 @@ function Visitors() {
                                 )
                             }
 
+
                         </tbody>
                     </table>
                 </div>
             </div>
+            
+            {
+                selectedItem && (
+                    <div className="bg-white/95 border border-black/50 rounded w-[20vw] top-0 right-[35vw] h-[30vh] absolute">
+                        <div className="flex flex-col justify-center p-8 h-full w-full">
+                            <h1 className="text-lg font-semibold">Admin Password</h1>
+                            <p>
+                                Enter admin password to delete visitor. This is irreversible.
+                            </p>
+                            <div className="flex flex-col gap-4 items-center mt-4 w-full">
+                                <div className="flex flex-col gap-2 w-full">
+                                    <input type="password" id="password" onChange={(e) => setPassword(e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 border shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                </div>
+                            </div>
+                            <div className="w-full flex items-center justify-end">
+                                <button onClick={()=>setSelectedItem(null)} className="mt-4 text-red-500 px-4 py-2 rounded">Cancel</button>
+                                <button onClick={()=>handleDelete()} className="mt-4 bg-red-500 text-white px-4 py-2 rounded">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
 
         </div>
     )

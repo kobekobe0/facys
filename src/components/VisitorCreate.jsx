@@ -97,7 +97,6 @@ function VisitorCreate() {
             console.log(response.data);
             toast.dismiss();
             toast.success("Registration successful.");
-            navigate('/');
         } catch (error) {
             toast.dismiss();
             toast.error(error.response?.data?.message || "Registration failed.");

@@ -45,6 +45,8 @@ function Students() {
             if (endDate) params.endDate = endDate;
             if (department) params.department = department;
             if (yearLevel) params.yearLevel = yearLevel;
+
+            console.log(params)
     
             const res = await axios.get(`${API_URL}student/all`, { params });
     
