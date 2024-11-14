@@ -47,42 +47,63 @@ const LoginPage = () => {
 
 
     return (
-        <div className="flex flex-1 bg-slate-100 items-center flex-col w-full h-fit overflow-y-scroll">
-            <div className="flex flex-col w-screen p-8 xl:w-[50vw]">
-                <div className="flex justify-center flex-col">
+        <div className="flex justify-center items-center min-h-[75vh] bg-gradient-to-r from-rose-400 to-red-500">
+            <div className="flex flex-col w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+                {/* Header */}
+                <div className="text-center mb-8">
                     <h2 className="text-2xl text-gray-700">
-                    Login to your <span className="text-red-800 font-semibold">Account</span>
+                        Login to your <span className="text-red-800 font-semibold">Account</span>
                     </h2>
-                    <p>Enter your creadentials below.</p>
+                    <p className="text-gray-600 mt-2">Enter your credentials below.</p>
                 </div>
 
-                <div className="flex justify-center flex-col mt-12">
-                    <label className="text-sm mb-2">Student Number</label>
-                    <input
-                        type="text"
-                        className="border border-gray-300 bg-gray-100 rounded-md p-2 mb-4"
-                        value={studentNumber}
-                        onChange={(e) => setStudentNumber(e.target.value)}
-                    />
-                    <label className="text-sm mb-2">Password</label>
-                    <input
-                        type="password"
-                        className="border border-gray-300 bg-gray-100 rounded-md p-2 mb-4"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <div className="flex flex-col space-y-4">
-                    <Link to="/register" className="text-red-800"><span className="text-black">Don't have an account?</span> Register here</Link>
-                    <Link to="/forgot-password" className="text-red-800"><span className="text-black">Forgot your password?</span> Reset here</Link>
-                    <Link to="/admin-signin" className="text-red-800"><span className="text-black">Access admin dashboard</span> Click here</Link>
+                {/* Form */}
+                <div className="space-y-6">
+                    <div>
+                        <label className="block text-sm mb-1">Student Number</label>
+                        <input
+                            type="text"
+                            className="border border-gray-300 bg-gray-100 rounded-md p-2 w-full"
+                            value={studentNumber}
+                            onChange={(e) => setStudentNumber(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm mb-1">Password</label>
+                        <input
+                            type="password"
+                            className="border border-gray-300 bg-gray-100 rounded-md p-2 w-full"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
                 </div>
 
-                <div className="w-full mt-8">
-                    <button onClick={handleLogin} className="hover:bg-red-900 transition-all ease-in-out border  bg-red-800 w-full text-white rounded-md  px-4 py-2 text-lg">Next</button>
+                {/* Links */}
+                <div className="flex flex-col space-y-4 mt-6 text-center">
+                    <Link to="/register" className="text-red-800">
+                        <span className="text-gray-700">Don't have an account?</span> Register here
+                    </Link>
+                    <Link to="/forgot-password" className="text-red-800">
+                        <span className="text-gray-700">Forgot your password?</span> Reset here
+                    </Link>
+                    <Link to="/admin-signin" className="text-red-800">
+                        <span className="text-gray-700">Access admin dashboard</span> Click here
+                    </Link>
+                </div>
+
+                {/* Button */}
+                <div className="mt-8">
+                    <button 
+                        onClick={handleLogin} 
+                        className="w-full bg-red-800 hover:bg-red-900 transition-all text-white rounded-md py-2 text-lg"
+                    >
+                        Next
+                    </button>
                 </div>
             </div>
         </div>
+
     )
 }
 
@@ -92,9 +113,6 @@ const Signin = () => {
         <main className="flex flex-col h-[100vh]">
             <Navbar/>
             <LoginPage/>
-            <div className="flex-1 max-h-20 flex items-center justify-center bg-red-950 shadow-lg">
-                <p className="text-white text-xs">© Facys Team | 2024</p>
-            </div>
         </main>
     );
 }
