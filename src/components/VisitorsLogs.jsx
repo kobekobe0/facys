@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import React from 'react'
 import API_URL from "../constants/api";
 import debounce from "../helper/debounce";
+import printVisitorLogs from "../helper/printVisitorLog";
 
 function VisitorLogs() {
     const [logs, setLogs] = useState([]);
@@ -51,10 +52,15 @@ function VisitorLogs() {
         fetchLogs();
     }, [])  
 
+    const handlePrint = () => {
+        console.log(logs)
+        printVisitorLogs(logs, startDate, endDate);
+    }
+
     return (
         <div className='flex p-8 flex-col h-full'>
             <div className='w-full justify-between flex items-center'>
-                <h1 className='text-xl font-semibold'>Student Logs</h1>
+                <h1 className='text-xl font-semibold'>Visitor Logs</h1>
             </div>
             <div className="flex items-center text-gray-700 shadow-md rounded p-4 my-4 bg-white justify-between">
                 <div className="flex flex-wrap gap-4 items-center bg-gray-50 rounded-lg shadow-sm">
@@ -90,6 +96,11 @@ function VisitorLogs() {
                         <option value="500">500</option>
                         <option value="1000">1000</option>
                         </select>
+                    </div>
+
+                    <div className="flex flex-col items-start">
+                        <label htmlFor="" className="text-xs font-medium my-1 text-gray-700">Print</label>
+                        <button onClick={handlePrint} className="bg-blue-500 text-white px-4 py-1 rounded">Print</button>
                     </div>
                 </div>
 
@@ -127,7 +138,6 @@ function VisitorLogs() {
                     </table>
                 </div>
             </div>
-
         </div>
     )
 }

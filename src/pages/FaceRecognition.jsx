@@ -23,7 +23,7 @@ function FaceRecognition() {
             toast.success('Face scanned successfully');
         }).catch(err => {
             console.log("EEE")
-            toast.error("DDD", err.response.data.message);
+            toast.error(err.response.data.message);
         });
     }
 

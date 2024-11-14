@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import API_URL from '../../../constants/api';
+import printStudentDetailsWithLogs from '../../../helper/printStudentWithDetailsAndLogs';
 
-function LogsTab({ studentId }) {
+function LogsTab({ studentId, student }) {
   const [logs, setLogs] = useState([]);
   const [pagination, setPagination] = useState({
     totalDocs: 0,
@@ -50,6 +51,10 @@ function LogsTab({ studentId }) {
     fetchLogs(newPage);
   };
 
+  const handlePrint = () => {
+    printStudentDetailsWithLogs(student, logs, dateRange.start, dateRange.end);
+  }
+
   return (
     <div className="flex flex-col w-full bg-white shadow-lg rounded-lg p-6 space-y-8">
       <h3 className="text-xl font-semibold text-gray-800 mb-4">Logs</h3>
@@ -87,6 +92,11 @@ function LogsTab({ studentId }) {
             onChange={(e) => setDateRange((prev) => ({ ...prev, end: e.target.value }))}
             className="mt-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 focus:ring-2 focus:ring-indigo-500"
           />
+        </div>
+
+        <div className='flex flex-col'>
+          <label className="text-sm text-gray-600">Print</label>
+          <button onClick={handlePrint} className="mt-1 px-4 py-2 bg-blue-500 text-white rounded-md">Print</button>
         </div>
       </div>
 

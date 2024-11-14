@@ -65,7 +65,7 @@ function StudentId() {
 
           {/* Content Area */}
           <div className="flex-grow w-full overflow-y-auto text-gray-600">
-            {activeTab === 'logs' && <LogsTab studentId={id} />}
+            {activeTab === 'logs' && <LogsTab studentId={id} student={student}/>}
             {activeTab === 'schedule' && <ScheduleTab schedule={student?.schedule || []} />}
             {activeTab === 'settings' && <StudentSettings student={student} />}
           </div>
