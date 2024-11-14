@@ -62,7 +62,7 @@ const LoginPage = () => {
     }
 
     return (
-<div className="flex justify-center items-center min-h-[75vh] bg-gradient-to-r from-rose-400 to-red-500">
+<div className="flex justify-center items-center min-h-[75vh] bg-gray-100">
     <div className="flex flex-col w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         {/* Header */}
         <div className="text-center mb-8">
