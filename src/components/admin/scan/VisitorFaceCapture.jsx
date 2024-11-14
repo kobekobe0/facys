@@ -127,7 +127,7 @@ const VisitorFaceCapture = ({ start, setStart, visitorFaceData, visitorFaceData2
                     {message}
                 </p>
             )}
-            <video ref={videoRef} autoPlay style={{ width: '100%' }} />
+            <video ref={videoRef} playsInline autoPlay style={{ width: '100%' }} />
             {faceDetected && (
                 <button
                     className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white border-2 border-red-500 text-white px-4 py-2 rounded-full h-16 w-16"
