@@ -46,6 +46,29 @@ const StudentProfile = () => {
         }
     }
 
+    const handleUpdateGuardianEmail = async (email, password) => {
+        toast.loading('Updating guardian email...')
+        try { 
+            const res = await axios.put(`${API_URL}student/guardian-email`, {
+                guardianEmail: email,
+                password
+            }, {
+                headers: {
+                    Authorization: `${localStorage.getItem('authToken')}`
+                }
+            })
+            console.log(email)
+            toast.dismiss()
+            toast.success('Guardian Email updated successfully')
+            await fetchUser()
+        } catch (error) {
+            console.log(error)
+            toast.dismiss()
+            toast.error(error?.response?.data?.message  || 'Failed to update email')
+
+        }
+    }
+
     const handlePasswordUpdate = async (oldPassword, newPassword) => {
         toast.loading('Updating password...')
         try {
@@ -197,7 +220,7 @@ const StudentProfile = () => {
                 </>
                 )}
                 {activeTab === 'account' && (
-                    <AccountSettings student={student} onEmailUpdate={handleUpdateEmail} onPasswordUpdate={handlePasswordUpdate}/>
+                    <AccountSettings student={student} onEmailUpdate={handleUpdateEmail} onGuardianEmailUpdate={handleUpdateGuardianEmail} onPasswordUpdate={handlePasswordUpdate}/>
 
                 )}
                 {activeTab === 'cor-update' && (

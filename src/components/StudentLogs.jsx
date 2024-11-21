@@ -13,7 +13,11 @@ function StudentLogs() {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
+    const [sections, setSections] = useState([])
+    const [section, setSection] = useState(null)
+
     const fetchLogs = async () => {
+        if(section === 'null') setSection(null);
         try {
             const params = {};
     
@@ -22,6 +26,7 @@ function StudentLogs() {
             if (page) params.page = page;
             if (startDate) params.startDate = startDate;
             if (endDate) params.endDate = endDate;
+            if (section) params.section = section;
     
             const res = await axios.get(`${API_URL}log`, { params });
     
@@ -46,10 +51,18 @@ function StudentLogs() {
 
     useEffect(() => {
         fetchLogs();
-    }, [name, limit, page, startDate, endDate])
+    }, [name, limit, page, startDate, endDate, section])
+
+    
+    const fetchColleges = async () => {
+        const res = await axios.get(`${API_URL}config/department`);
+        console.log(res.data.UniqueDepartmentsFromStudents)
+        setSections(res.data.UniqueSectionFromStudents);
+    }
 
     useEffect(() => {
         fetchLogs();
+        fetchColleges()
     }, [])  
 
     const handlePrint = () => {
@@ -82,7 +95,21 @@ function StudentLogs() {
                         className="mt-1 block w-full rounded-md border-gray-300 border p-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                     </div>
-
+                    <div className="flex flex-col min-w-[200px]">
+                        <label htmlFor="Section" className="text-xs font-medium text-gray-700">Section</label>
+                        <select 
+                        id="Section" 
+                        onChange={(e) => setSection(e.target.value)} 
+                        className="mt-1 block w-full rounded-md border-gray-300 border shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value='null'>Set Section</option>
+                            {
+                                sections.map(college => (
+                                    <option value={college}>{college}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
                     <div className="flex flex-col">
                         <label htmlFor="limit" className="text-xs font-medium text-gray-700">Limit</label>
                         <select 

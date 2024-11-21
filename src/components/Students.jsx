@@ -31,10 +31,13 @@ function Students() {
     const [endDate, setEndDate] = useState(null);
 
     const [colleges, setColleges] = useState([]);
+    const [section, setSection] = useState([])
+    const [selectedSection, setSelectedSection] = useState(null)
 
     const fetchLogs = async () => {
         if(department === 'null') setDepartment(null);
         if(yearLevel === 'null') setYearLevel(null);
+        if(selectedSection === 'null') setSelectedSection(null);
         try {
             const params = {};
     
@@ -45,6 +48,7 @@ function Students() {
             if (endDate) params.endDate = endDate;
             if (department) params.department = department;
             if (yearLevel) params.yearLevel = yearLevel;
+            if (selectedSection) params.section = selectedSection;
 
             console.log(params)
     
@@ -61,6 +65,7 @@ function Students() {
         const res = await axios.get(`${API_URL}config/department`);
         console.log(res.data.UniqueDepartmentsFromStudents)
         setColleges(res.data.UniqueDepartmentsFromStudents);
+        setSection(res.data.UniqueSectionFromStudents);
     }
 
     const debouncedSetQuery = useCallback(
@@ -78,7 +83,7 @@ function Students() {
     useEffect(() => {
         console.log(department, yearLevel)
         fetchLogs();
-    }, [name, limit, page, startDate, endDate, department, yearLevel])
+    }, [name, limit, page, startDate, endDate, department, yearLevel, selectedSection])
 
     useEffect(() => {
         fetchLogs();
@@ -103,6 +108,21 @@ function Students() {
                             {
                                 colleges.map(college => (
                                     <option value={college}>{abbreviate(college)}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                    <div className="flex flex-col min-w-[200px]">
+                        <label htmlFor="Section" className="text-xs font-medium text-gray-700">Section</label>
+                        <select 
+                        id="Section" 
+                        onChange={(e) => setSelectedSection(e.target.value)} 
+                        className="mt-1 block w-full rounded-md border-gray-300 border shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value='null'>Set Section</option>
+                            {
+                                section.map(college => (
+                                    <option value={college}>{college}</option>
                                 ))
                             }
                         </select>

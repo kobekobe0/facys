@@ -2,7 +2,7 @@ import logo from '../assets/logo.png'
 
 const printVisitorLogs = (logs, startDate = '', endDate = '') => {
     const logoPlaceholder = 'Logo Placeholder';
-    const systemName = 'Facys';
+    const systemName = 'BulSU Bustos Facys';
 
     const dateRange = startDate || endDate
         ? `Visitor Logs: ${startDate ? startDate : ''}${startDate && endDate ? ' - ' : ''}${endDate ? endDate : ''}`

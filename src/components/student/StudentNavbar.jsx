@@ -23,7 +23,7 @@ const StudentNavbar = () => {
                 <Link to="/" className="text-2xl font-bold">
                     <img src={logo} alt="Logo" className="w-8 h-8" />
                 </Link>
-                <span className="ml-2 text-lg font-semibold">Facys</span>
+                <span className="ml-2 text-lg font-semibold">BulSU Bustos Facys</span>
             </div>
 
             <button 

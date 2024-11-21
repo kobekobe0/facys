@@ -53,6 +53,8 @@ import Dashboard from './pages/Dashboard.jsx'
 import Visitors from './components/Visitors.jsx'
 import VisitorLogs from './components/VisitorsLogs.jsx'
 import VisitorCreate from './components/VisitorCreate.jsx'
+import VisitorRegister from './components/VisitorRegister.jsx'
+import ArchiveStudents from './components/ArchiveStudents.jsx'
 
 const router = createBrowserRouter([
   {
@@ -88,6 +90,10 @@ const router = createBrowserRouter([
       {
         path: 'students',
         element: <Students />,
+      },
+      {
+        path: 'archived',
+        element: <ArchiveStudents />,
       },
       {
         path: 'blocklist',
@@ -142,6 +148,10 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <Register />
+  },
+  {
+    path: '/register-visitor',
+    element: <VisitorRegister />
   },
   {
     path: '/testing',

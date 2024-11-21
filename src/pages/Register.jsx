@@ -35,6 +35,7 @@ const Register = () => {
       dateOfBirth: '',
     });
     const [email, setEmail] = useState('');
+    const [guardianEmail, setGuardianEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -124,6 +125,8 @@ console.log("Support Descriptor 2:", faceData3);
 
       const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       if (email === '' || password === '' || confirmPassword === '') return toast.error("Please fill in all fields");
+      if(!guardianEmail) return toast.error("Please provide a guardian email");
+      if (!emailRegex.test(guardianEmail)) return toast.error("Invalid guardian email address");
       if (!emailRegex.test(email)) return toast.error("Invalid email address");
       if (password !== confirmPassword) return toast.error("Passwords do not match");
       if (password.length < 8) return toast.error("Password must be at least 8 characters long");
@@ -151,6 +154,7 @@ console.log("Support Descriptor 2:", faceData3);
           formData.append("SY", `AY ${details.SY.start} - ${details.SY.end} ${details.SY.semester} Semester`);
           formData.append("yearLevel", details.yearLevel);
           formData.append("email", email);
+          formData.append("guardianEmail", guardianEmail);
           formData.append("password", password);
   
           // Prepare face data structure
@@ -244,6 +248,9 @@ console.log("Support Descriptor 2:", faceData3);
                   <div className="flex flex-col w-full gap-2">
                     <label>Email</label>
                     <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="border border-gray-300 rounded-md p-2 mb-4 mt-1 w-full"/>
+
+                    <label>Guardian Email</label>
+                    <input type="email" value={guardianEmail} onChange={(e) => setGuardianEmail(e.target.value)} className="border border-gray-300 rounded-md p-2 mb-4 mt-1 w-full"/>
 
                     <label>Password</label>
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="border border-gray-300 rounded-md p-2 mt-1 w-full"/>

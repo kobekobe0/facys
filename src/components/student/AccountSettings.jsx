@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
-const AccountSettings = ({ student, onEmailUpdate, onPasswordUpdate }) => {
+const AccountSettings = ({ student, onEmailUpdate, onGuardianEmailUpdate, onPasswordUpdate }) => {
     const [email, setEmail] = useState(student.email);
+    const [guardianEmail, setGuardianEmail] = useState(student.guardianEmail);
     const [password, setPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -24,6 +25,24 @@ const AccountSettings = ({ student, onEmailUpdate, onPasswordUpdate }) => {
             return;
         }
         onEmailUpdate(email, password);
+        setPassword('');
+    };
+    const handleGuardianEmailUpdate = () => {
+        //check email is valid using regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(guardianEmail)) {
+            toast.error("Invalid email format.");
+            return;
+        }
+        if (guardianEmail === student.guardianEmail) {
+            toast.success("Email is already up-to-date.");
+            return;
+        }
+        if (!password) {
+            toast.error("Password is required.");
+            return;
+        }
+        onGuardianEmailUpdate(guardianEmail, password);
         setPassword('');
     };
 
@@ -79,6 +98,29 @@ const AccountSettings = ({ student, onEmailUpdate, onPasswordUpdate }) => {
                     className="mt-2 bg-red-600 text-white py-2 rounded w-full hover:bg-red-700 transition"
                 >
                     Update Email
+                </button>
+            </div>
+            <div className="mb-6">
+                <h3 className="text-sm font-medium text-gray-500 mb-2">Update Guardian Email</h3>
+                <input
+                    type="email"
+                    value={guardianEmail}
+                    onChange={(e) => setGuardianEmail(e.target.value)}
+                    className="border border-gray-300 rounded p-2 w-full mb-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    placeholder="Email"
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="border border-gray-300 rounded p-2 w-full mb-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    placeholder="Current Password"
+                />
+                <button
+                    onClick={handleGuardianEmailUpdate}
+                    className="mt-2 bg-red-600 text-white py-2 rounded w-full hover:bg-red-700 transition"
+                >
+                    Update Guardian Email
                 </button>
             </div>
 

@@ -13,7 +13,7 @@ const Landing = () => {
             <Navbar/>
             <Banner/>
             <div className="flex-1 max-h-20 flex items-center justify-center border-t-2 border-red-950 shadow-lg">
-                <p className="text-red-950 text-xs">© Facys Team | 2024</p>
+                <p className="text-red-950 text-xs">© BulSU Bustos Facys Team | 2024</p>
             </div>
         </main>
     );

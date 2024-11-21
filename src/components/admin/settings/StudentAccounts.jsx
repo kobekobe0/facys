@@ -28,9 +28,9 @@ const StudentAccounts = () => {
             if (adminPassword.length < 8) {
                 return toast.error('Password must be at least 8 characters long');
             }  
-
+            console.log(accounts)
             const body = {
-                ids: accounts.map(account => account._id),
+                ids: accounts.docs.map(account => account._id),
                 password: adminPassword
             }
             
@@ -49,6 +49,7 @@ const StudentAccounts = () => {
             toast.success(res.data.message || 'Old accounts deleted successfully');
             handleModalClose(); // Close modal on success
         } catch (error) {
+            console.log(error)
             toast.error(error.response?.data?.message || 'Failed to delete old accounts');
         }
     };
@@ -73,13 +74,10 @@ const StudentAccounts = () => {
 
     return (
         <div>
-             <p className='bg-yellow-200 rounded text-yellow-700 my-4 p-2'>
-                This action is irreversible, proceed with caution.
-            </p>
             <h2 className="text-xl font-semibold mb-4">Student Accounts</h2>
 
             <p className="mb-4">
-                Delete <span className='font-bold text-lg'>{accounts.length}</span> outdated/old accounts and associated logs with it.
+                Archive <span className='font-bold text-lg'>{accounts?.docs?.length || 0}</span> outdated/old accounts and associated logs with it.
             </p>
             
             {
@@ -88,7 +86,7 @@ const StudentAccounts = () => {
                         className="px-4 py-2 bg-red-600 text-white rounded"
                         onClick={handleDeleteAccounts}
                     >
-                        Delete Old Accounts
+                        Archive Old Accounts
                     </button>
                 )
             }

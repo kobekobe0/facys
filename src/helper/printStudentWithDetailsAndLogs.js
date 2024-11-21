@@ -1,7 +1,7 @@
 import logo from '../assets/logo.png';
 
 const printStudentDetailsWithLogs = (student, logs, startDate = '', endDate = '') => {
-    const systemName = 'Facys';
+    const systemName = 'BulSU Bustos Facys';
 
     const dateRange = startDate || endDate
         ? `Logs Date Range: ${startDate ? startDate : ''}${startDate && endDate ? ' - ' : ''}${endDate ? endDate : ''}`

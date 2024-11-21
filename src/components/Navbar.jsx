@@ -29,8 +29,11 @@ const Navbar = () => {
           {/* Right side: Login/Signup (hidden on small view) */}
           <div className="hidden md:flex space-x-4 items-center">
             <Link className="text-gray-600 hover:text-red-950" to='/signin'>Login</Link>
+            <Link className=" text-gray-600 px-4 py-1 rounded" to='/register-visitor'>
+              Visitor Register
+            </Link>
             <Link className="bg-red-950 text-white px-4 py-1 rounded" to='/register'>
-              Sign Up
+              Register
             </Link>
           </div>
 
@@ -70,10 +73,16 @@ const Navbar = () => {
           Login
         </Link>
         <Link
+          to="/register-visitor"
+          className="bg-green-500 text-white px-6 py-2 rounded text-xl"
+        >
+          Visitor Register
+        </Link> 
+        <Link
           to="/register"
           className="bg-green-500 text-white px-6 py-2 rounded text-xl"
         >
-          Sign Up
+          Student Register
         </Link> 
 
       </div>

@@ -113,7 +113,7 @@ const ResetPassword = () => {
             <Navbar/>
             <RegistrationPage/>
             <div className="flex-1 max-h-20 flex items-center justify-center bg-red-950 shadow-lg">
-                <p className="text-white text-xs">© Facys Team | 2024</p>
+                <p className="text-white text-xs">© BulSU Bustos Facys Team | 2024</p>
             </div>
         </main>
     );

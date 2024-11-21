@@ -59,6 +59,12 @@ function Sidebar() {
             iconWhite: <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="white" fillRule="evenodd" d="M16.5 15.75a2.75 2.75 0 0 0-2.383 4.123l3.756-3.756a2.735 2.735 0 0 0-1.373-.367m2.42 1.442l-3.728 3.728a2.75 2.75 0 0 0 3.728-3.728M12.25 18.5a4.25 4.25 0 1 1 8.5 0a4.25 4.25 0 0 1-8.5 0" clipRule="evenodd"/><path fill="white" d="M16 6a4 4 0 1 1-8 0a4 4 0 0 1 8 0m-1.705 7.188A5.752 5.752 0 0 0 11.938 22C4 21.99 4 19.979 4 17.5c0-2.485 3.582-4.5 8-4.5c.798 0 1.568.066 2.295.188"/></svg>
         },
         {
+            name: 'Archived Accounts',
+            path: '/admin/archived',
+            icon:<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M0 4.6A2.6 2.6 0 0 1 2.6 2h18.8A2.6 2.6 0 0 1 24 4.6v.8A2.6 2.6 0 0 1 21.4 8h-.486L20 18.6c0 1.33-1.07 2.4-2.4 2.4H6.4C5.07 21 4 19.93 4 18.6L3.086 8H2.6A2.6 2.6 0 0 1 0 5.4zM2.6 4a.6.6 0 0 0-.6.6v.8a.6.6 0 0 0 .6.6h18.8a.6.6 0 0 0 .6-.6v-.8a.6.6 0 0 0-.6-.6zM15 9H9V7H7v2.2A1.8 1.8 0 0 0 8.8 11h6.4A1.8 1.8 0 0 0 17 9.2V7h-2z" clip-rule="evenodd"/></svg>,
+            iconWhite: <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M0 4.6A2.6 2.6 0 0 1 2.6 2h18.8A2.6 2.6 0 0 1 24 4.6v.8A2.6 2.6 0 0 1 21.4 8h-.486L20 18.6c0 1.33-1.07 2.4-2.4 2.4H6.4C5.07 21 4 19.93 4 18.6L3.086 8H2.6A2.6 2.6 0 0 1 0 5.4zM2.6 4a.6.6 0 0 0-.6.6v.8a.6.6 0 0 0 .6.6h18.8a.6.6 0 0 0 .6-.6v-.8a.6.6 0 0 0-.6-.6zM15 9H9V7H7v2.2A1.8 1.8 0 0 0 8.8 11h6.4A1.8 1.8 0 0 0 17 9.2V7h-2z" clip-rule="evenodd"/></svg>
+        },
+        {
             name: 'Settings',
             path: '/admin/settings',
             icon:<svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="currentColor" d="M20 12c0-.568-.061-1.122-.174-1.656l1.834-1.612l-2-3.464l-2.322.786a8 8 0 0 0-2.859-1.657L14 2h-4l-.479 2.396a8 8 0 0 0-2.859 1.657L4.34 5.268l-2 3.464l1.834 1.612a8 8 0 0 0 0 3.312L2.34 15.268l2 3.464l2.322-.786a8 8 0 0 0 2.859 1.657L10 22h4l.479-2.396a8 8 0 0 0 2.859-1.657l2.322.786l2-3.464l-1.834-1.612A8 8 0 0 0 20 12m-8 4a4 4 0 1 1 0-8a4 4 0 0 1 0 8"/></svg>,
@@ -80,7 +86,7 @@ function Sidebar() {
         <div className='flex items-center mb-8 p-2'>
             <img src={swoosh} alt="logo" width={50} />
             <div className='flex items-start ml-4 flex-col'>
-                <h2 className='font-bold text-white text-xl m-0'>Facys</h2>
+                <h2 className='font-bold text-white text-lg m-0'>BulSU Bustos Facys</h2>
                 <p className='font-normal text-white text-sm m-0'>Face Recognition System</p>
             </div>
         </div>
@@ -97,7 +103,7 @@ function Sidebar() {
     </div>  
     <div className='text-center flex justify-end h-full flex-col text-white'>
         <button onClick={handleLogout} className='bg-red-900 mb-4 px-1 p-2 hover:bg-red-700 duration-105 rounded-sm text-sm transition-all flex items-center justify-center gap-2'><svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="white" d="m16.56 5.44l-1.45 1.45A5.97 5.97 0 0 1 18 12a6 6 0 0 1-6 6a6 6 0 0 1-6-6c0-2.17 1.16-4.06 2.88-5.12L7.44 5.44A7.96 7.96 0 0 0 4 12a8 8 0 0 0 8 8a8 8 0 0 0 8-8c0-2.72-1.36-5.12-3.44-6.56M13 3h-2v10h2"/></svg>Logout</button>
-        <h2 className='text-xs font-medium'>© 2024 | Facys Team</h2>
+        <h2 className='text-xs font-medium'>© 2024 | BulSU Bustos Facys Team</h2>
     </div>
 </div>
   )
