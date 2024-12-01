@@ -15,9 +15,11 @@ function StudentLogs() {
 
     const [sections, setSections] = useState([])
     const [section, setSection] = useState(null)
+    const [sex, setSex] = useState(null)
 
     const fetchLogs = async () => {
         if(section === 'null') setSection(null);
+        if(sex === 'null') setSex(null);
         try {
             const params = {};
     
@@ -27,6 +29,7 @@ function StudentLogs() {
             if (startDate) params.startDate = startDate;
             if (endDate) params.endDate = endDate;
             if (section) params.section = section;
+            if (sex) params.sex = sex;
     
             const res = await axios.get(`${API_URL}log`, { params });
     
@@ -51,7 +54,7 @@ function StudentLogs() {
 
     useEffect(() => {
         fetchLogs();
-    }, [name, limit, page, startDate, endDate, section])
+    }, [name, limit, page, startDate, endDate, section, sex])
 
     
     const fetchColleges = async () => {
@@ -108,6 +111,18 @@ function StudentLogs() {
                                     <option value={college}>{college}</option>
                                 ))
                             }
+                        </select>
+                    </div>
+                    <div className="flex flex-col min-w-[200px]">
+                        <label htmlFor="Section" className="text-xs font-medium text-gray-700">Sex</label>
+                        <select 
+                        id="Section" 
+                        onChange={(e) => setSex(e.target.value)} 
+                        className="mt-1 block w-full rounded-md border-gray-300 border shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value='null'>Set Sex</option>
+                            <option value='M'>Male</option>
+                            <option value='F'>Female</option>
                         </select>
                     </div>
                     <div className="flex flex-col">

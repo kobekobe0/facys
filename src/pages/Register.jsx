@@ -31,7 +31,7 @@ const Register = () => {
       studentNumber: '',
       studentName: '',
       department: '',
-      sex: 'M',
+      sex: '',
       dateOfBirth: '',
     });
     const [email, setEmail] = useState('');
@@ -88,7 +88,7 @@ const Register = () => {
           break;
         case 1:
           console.log(details);
-          if(details.studentNumber === '' || details.studentName === '' || details.department === '' || details.dateOfBirth === '') {
+          if(details.studentNumber === '' || details.studentName === '' || details.department === '' || details.dateOfBirth === '' || details.sex === '' || !details.sex) {
             toast.error("Please fill in all fields");
             return;
           }
@@ -143,6 +143,8 @@ console.log("Support Descriptor 2:", faceData3);
           const formData = new FormData();
   
           // Append text fields to FormData
+          console.log(details)
+
           formData.append("studentNumber", details.studentNumber);
           formData.append("name", details.studentName);
           formData.append("schedule", JSON.stringify(schedule));

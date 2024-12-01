@@ -47,6 +47,7 @@ const CheckDetails = ({ next, prev, details, setDetails, schedule }) => {
                         onChange={(e) => setDetails({ ...details, sex: e.target.value })}
                         className='border border-gray-300 rounded-md p-2 mt-1'
                     >
+                        <option value=''>Select</option>
                         <option value='M'>Male</option>
                         <option value='F'>Female</option>
                     </select>
