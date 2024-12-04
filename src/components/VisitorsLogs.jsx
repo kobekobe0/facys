@@ -54,7 +54,7 @@ function VisitorLogs() {
 
     const handlePrint = () => {
         console.log(logs)
-        printVisitorLogs(logs, startDate, endDate);
+        printVisitorLogs(logs, startDate, endDate, prompt('Reported by:'));
     }
 
     return (

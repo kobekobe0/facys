@@ -52,7 +52,7 @@ function LogsTab({ studentId, student }) {
   };
 
   const handlePrint = () => {
-    printStudentDetailsWithLogs(student, logs, dateRange.start, dateRange.end);
+    printStudentDetailsWithLogs(student, logs, dateRange.start, dateRange.end, prompt('Reported by:'));
   }
 
   return (

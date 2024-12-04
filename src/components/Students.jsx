@@ -188,6 +188,7 @@ function Students() {
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Department</th>
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Year Level</th>
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Section</th>
+                                <th className="border font-medium text-sm border-gray-300 p-2 text-left">Sex</th>
                                 <th className="border font-medium text-sm border-gray-300 p-2 text-left">Action</th>
                             </tr>
                         </thead>
@@ -204,6 +205,7 @@ function Students() {
                                     <td className="p-2">{log?.department}</td>
                                     <td className="p-2">{log?.yearLevel}</td>
                                     <td className="p-2">{log?.section}</td>
+                                    <td className="p-2">{log?.sex}</td>
                                     <td className="p-2 flex item-center h-full justify-center font-bold gap-2">
                                         <Link to={`/admin/students/${log._id}`} className=' text-blue-500 border-blue-500  text-xs px-2 rounded py-1'>View</Link>
                                     </td>

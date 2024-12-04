@@ -1,6 +1,6 @@
 import logo from '../assets/logo.png';
 
-const printStudentLogs = (logs, startDate = '', endDate = '') => {
+const printStudentLogs = (logs, startDate = '', endDate = '', reportedBy) => {
     const systemName = 'BulSU Bustos Facys';
 
     const dateRange = startDate || endDate
@@ -20,7 +20,8 @@ const printStudentLogs = (logs, startDate = '', endDate = '') => {
                     .header {
                         display: flex;
                         align-items: center;
-                        justify-content: start;
+                        justify-content: center;
+                        width: 100%;
                         margin-bottom: 20px;
                         gap: 10px;
                     }
@@ -28,9 +29,18 @@ const printStudentLogs = (logs, startDate = '', endDate = '') => {
                         font-size: 24px;
                         margin: 0;
                     }
-                    .date-range {
+                    .header p {
                         font-size: 14px;
+                        margin: 0;
+                    }
+                    .date-range {
+                        font-size: 18px;
                         color: #555;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
+                        background-color: #f4f4f4;
                     }
                     table {
                         width: 100%;
@@ -50,14 +60,22 @@ const printStudentLogs = (logs, startDate = '', endDate = '') => {
                 </style>
             </head>
             <body>
-                <div class="header">
-                    <img src="${logo}" alt="Logo" width="75" height="75">
-                    <h1>${systemName}</h1>
-                </div>
-                <div class="date-range">
-                    ${dateRange}
-                </div>
+
+                    <div class="header">
+                        <img src="${logo}" alt="Logo" width="50" height="50">
+                        <div>
+                            <h1>Bulacan State University</h1>
+                            <p>${systemName}</p>
+                        </div>
+
+                    </div>
+                    <div class="date-range">
+                        <h4>S &nbsp; T &nbsp; U &nbsp; D &nbsp; E &nbsp; N &nbsp; T  &nbsp; &nbsp; L &nbsp; O &nbsp; G &nbsp; S &nbsp; &nbsp;  R &nbsp; E  P &nbsp; O &nbsp; R &nbsp; T</h4>
+                        
+                    </div>
+        
                 <hr>
+                <p>${dateRange}</p>
                 <table>
                     <thead>
                         <tr>
@@ -80,6 +98,11 @@ const printStudentLogs = (logs, startDate = '', endDate = '') => {
                         `).join('')}
                     </tbody>
                 </table>
+                <div style="margin-top: 100px; font-size: 12px">
+                    <p>Reported By: <u>${reportedBy}</u></p>
+                    <p>Generated: ${new Date().toLocaleString('en-us', { month: 'long', day: '2-digit', year: 'numeric' })}</p>
+                </div>
+
             </body>
         </html>
     `;

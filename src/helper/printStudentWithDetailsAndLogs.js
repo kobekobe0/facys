@@ -1,6 +1,6 @@
 import logo from '../assets/logo.png';
 
-const printStudentDetailsWithLogs = (student, logs, startDate = '', endDate = '') => {
+const printStudentDetailsWithLogs = (student, logs, startDate = '', endDate = '', reportedBy) => {
     const systemName = 'BulSU Bustos Facys';
 
     const dateRange = startDate || endDate
@@ -20,45 +20,58 @@ const printStudentDetailsWithLogs = (student, logs, startDate = '', endDate = ''
                     .header {
                         display: flex;
                         align-items: center;
-                        gap: 10px;
+                        justify-content: center;
+                        width: 100%;
                         margin-bottom: 20px;
+                        gap: 10px;
                     }
                     .header h1 {
                         font-size: 24px;
                         margin: 0;
                     }
-                    .student-profile {
-                        margin-bottom: 20px;
+                    .header p {
+                        font-size: 14px;
+                        margin: 0;
                     }
-                    .student-profile h2 {
-                        font-size: 20px;
-                        margin: 10px 0 5px 0;
+                    .date-range {
+                        font-size: 18px;
+                        color: #555;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
+                        background-color: #f4f4f4;
                     }
-                    .profile-picture {
-                        width: 150px;
-                        height: 150px;
-                        border-radius: 10px;
-                        margin-bottom: 10px;
-                    }
-                    .status {
-                        display: inline-block;
-                        font-size: 12px;
-                        margin-right: 5px;
-                        padding: 3px 8px;
-                        border-radius: 12px;
-                    }
-                    .blocked {
-                        background-color: #fee2e2;
-                        color: #b91c1c;
-                    }
-                    .up-to-date {
-                        background-color: #d1fae5;
-                        color: #065f46;
-                    }
-                    .out-of-date {
-                        background-color: #fee2e2;
-                        color: #b91c1c;
-                    }
+.student-profile {
+    margin-bottom: 20px;
+}
+
+.student-profile h2 {
+    font-size: 20px;
+    margin: 10px 0 20px 0;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three columns */
+    grid-auto-rows: min-content; /* Dynamic row height */
+    gap: 10px 20px; /* Adjust spacing between items */
+}
+
+.details-grid p {
+    font-size: 14px; /* Regular font size for details */
+    margin: 0; /* Remove default margin */
+}
+
+.details-grid .label {
+    font-size: 12px; /* Smaller font size for labels */
+    font-weight: bold; /* Bold to distinguish labels */
+    color: #555; /* Slightly dim color for labels */
+    display: block;
+}
+
+
+
                     table {
                         width: 100%;
                         border-collapse: collapse;
@@ -78,20 +91,31 @@ const printStudentDetailsWithLogs = (student, logs, startDate = '', endDate = ''
             </head>
             <body>
                 <div class="header">
-                    <img src="${logo}" alt="Logo" width="75" height="75">
-                    <h1>${systemName}</h1>
+                    <img src="${logo}" alt="Logo" width="50" height="50">
+                    <div>
+                        <h1>Bulacan State University</h1>
+                        <p>${systemName}</p>
+                    </div>
+                
+                    </div>
+                    <div class="header">
+                <h3>S &nbsp; T &nbsp; U &nbsp; D &nbsp; E &nbsp; N &nbsp; T &nbsp; &nbsp; R &nbsp; E &nbsp; P &nbsp; O &nbsp; R &nbsp; T</h3>
                 </div>
-                <div class="student-profile">
-                    <h1>Student Details</h1>
-                    <h2>${student?.name || 'N/A'}</h2>
-                    <p><strong>Student Number:</strong> ${student?.studentNumber || 'N/A'}</p>
-                    <p><strong>Academic Year:</strong> ${student?.SY || 'Unavailable'}</p>
-                    <p><strong>Section:</strong> ${student?.section || 'No Section'}</p>
-                    <p><strong>Department:</strong> ${student?.department || 'No Department'}</p>
-                    <p><strong>Email:</strong> ${student?.email || 'No Email'}</p>
-                </div>
+<div class="student-profile">
+
+    <div class="details-grid">
+        <p><span class="label">Name:</span> ${student?.name || 'N/A'}</p>
+        <p><span class="label">Student Number:</span> ${student?.studentNumber || 'N/A'}</p>
+        <p><span class="label">Academic Year:</span> ${student?.SY || 'Unavailable'}</p>
+        <p><span class="label">Section:</span> ${student?.section || 'No Section'}</p>
+        <p><span class="label">Department:</span> ${student?.department || 'No Department'}</p>
+        <p><span class="label">Email:</span> ${student?.email || 'No Email'}</p>
+    </div>
+</div>
+
+
                 <hr>
-                <h2>${dateRange}</h2>
+                <h4>${dateRange}</h4>
                 <table>
                     <thead>
                         <tr>
@@ -125,6 +149,10 @@ const printStudentDetailsWithLogs = (student, logs, startDate = '', endDate = ''
                             `}
                     </tbody>
                 </table>
+                <div style="margin-top: 50px; font-size: 12px;">
+                    <p>Reported By: <u>${reportedBy}</u></p>
+                    <p>Generated: ${new Date().toLocaleString('en-us', { month: 'long', day: '2-digit', year: 'numeric' })}</p> 
+                </div>
             </body>
         </html>
     `;

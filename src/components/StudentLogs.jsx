@@ -16,6 +16,7 @@ function StudentLogs() {
     const [sections, setSections] = useState([])
     const [section, setSection] = useState(null)
     const [sex, setSex] = useState(null)
+    const [reportedBy, setReportedBy] = useState('')
 
     const fetchLogs = async () => {
         if(section === 'null') setSection(null);
@@ -69,8 +70,7 @@ function StudentLogs() {
     }, [])  
 
     const handlePrint = () => {
-        console.log(logs)
-        printStudentLogs(logs, startDate, endDate);
+        printStudentLogs(logs, startDate, endDate, prompt('Please enter your name:'));
     }
     return (
         <div className='flex p-8 flex-col h-full'>
