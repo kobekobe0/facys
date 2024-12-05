@@ -70,7 +70,7 @@ const printStudentLogs = (logs, startDate = '', endDate = '', reportedBy) => {
 
                     </div>
                     <div class="date-range">
-                        <h4>S &nbsp; T &nbsp; U &nbsp; D &nbsp; E &nbsp; N &nbsp; T  &nbsp; &nbsp; L &nbsp; O &nbsp; G &nbsp; S &nbsp; &nbsp;  R &nbsp; E  P &nbsp; O &nbsp; R &nbsp; T</h4>
+                        <h4>S &nbsp; T &nbsp; U &nbsp; D &nbsp; E &nbsp; N &nbsp; T  &nbsp; &nbsp; L &nbsp; O &nbsp; G &nbsp; S &nbsp; &nbsp;  R &nbsp; E &nbsp; P &nbsp; O &nbsp; R &nbsp; T</h4>
                         
                     </div>
         
@@ -83,6 +83,7 @@ const printStudentLogs = (logs, startDate = '', endDate = '', reportedBy) => {
                             <th>Student Number</th>
                             <th>Department</th>
                             <th>Section</th>
+                            <th>Sex</th>
                             <th>Time In</th>
                         </tr>
                     </thead>
@@ -93,6 +94,7 @@ const printStudentLogs = (logs, startDate = '', endDate = '', reportedBy) => {
                                 <td>${log?.studentID?.studentNumber || 'N/A'}</td>
                                 <td>${log?.studentID?.department || 'N/A'}</td>
                                 <td>${log?.studentID?.section || 'N/A'}</td>
+                                <td>${log?.studentID?.sex || 'N/A'}</td>
                                 <td>${new Date(log?.timeIn).toLocaleString('en-us', { month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
                             </tr>
                         `).join('')}

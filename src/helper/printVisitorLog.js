@@ -70,7 +70,7 @@ const printVisitorLogs = (logs, startDate = '', endDate = '', reportedBy) => {
 
                     </div>
                 <div class="date-range">
-                        <h4>V &nbsp; I &nbsp; S &nbsp; I &nbsp; T &nbsp; O &nbsp; R  &nbsp; &nbsp; L &nbsp; O &nbsp; G &nbsp; S &nbsp; &nbsp;  R &nbsp; E  P &nbsp; O &nbsp; R &nbsp; T</h4>
+                        <h4>V &nbsp; I &nbsp; S &nbsp; I &nbsp; T &nbsp; O &nbsp; R  &nbsp; &nbsp; L &nbsp; O &nbsp; G &nbsp; S &nbsp; &nbsp;  R &nbsp; E &nbsp; P &nbsp; O &nbsp; R &nbsp; T</h4>
                         
                 </div>
                 <hr>
